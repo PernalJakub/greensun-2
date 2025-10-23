@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fluid Typography Card Demo</title>
+  <style>
+    /* ===== CSS CUSTOM PROPERTIES ===== */
+    :root {
+      /* Colors */
+      --color-primary: #1fc55c;
+      --color-primary-light: #2de3b9;
+      --color-bg: #ffffff;
+      --color-text: #1a1a1a;
+      --color-text-muted: #666666;
+      --color-border: #e0e0e0;
+      --color-shadow: rgba(0, 0, 0, 0.1);
+      --color-shadow-hover: rgba(31, 197, 92, 0.15);
+
+      /* Typography - Fluid scaling bounds */
+      /* Adjust min/max values to control heading size range */
+      --font-size-h3-min: 1.15rem;  /* 18.4px at 320px viewport */
+      --font-size-h3-max: 1.75rem;  /* 28px at 1200px+ viewport */
+      --font-size-body-min: 0.875rem;
+      --font-size-body-max: 1rem;
+
+      /* Spacing - Proportional to container size */
+      --space-min: 1rem;
+      --space-max: 2rem;
+
+      /* Animation */
+      --duration-fast: 200ms;
+      --easing: cubic-bezier(0.4, 0, 0.2, 1);
+
+      /* Card dimensions */
+      --card-radius: 16px;
+      --card-max-height-collapsed: 400px;
+      --card-max-height-expanded: 600px;
+    }
+
+    /* ===== RESET & BASE ===== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      line-height: 1.6;
+      color: var(--color-text);
+      background: linear-gradient(135deg, #f5f7fa 0%, #e8f5e9 100%);
+      padding: clamp(1rem, 5vw, 3rem);
+      min-height: 100vh;
+    }
+
+    /* ===== CARD GRID WITH CONTAINER QUERIES ===== */
+    .card-grid {
+      display: grid;
+      /* Adjust minmax() first value to control min card width */
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+      gap: clamp(1rem, 3vw, 2rem);
+      max-width: 1200px;
+      margin: 0 auto;
+      container-type: inline-size;
+    }
+
+    /* ===== CARD CONTAINER ===== */
+    .card {
+      /* Enable container queries for this card */
+      container-type: inline-size;
+      container-name: card;
+
+      position: relative;
+      background: var(--color-bg);
+      border-radius: var(--card-radius);
+      border: 1px solid var(--color-border);
+      box-shadow: 0 2px 8px var(--color-shadow);
+
+      /* Fluid padding using container query units */
+      /* Adjust cqw values to control padding scale */
+      padding: clamp(1.25rem, 5cqw, 2rem);
+
+      display: flex;
+      flex-direction: column;
+      gap: clamp(0.75rem, 3cqw, 1.25rem);
+
+      max-height: var(--card-max-height-collapsed);
+      overflow: hidden;
+
+      transition:
+        max-height var(--duration-fast) var(--easing),
+        box-shadow var(--duration-fast) var(--easing),
+        transform var(--duration-fast) var(--easing),
+        border-color var(--duration-fast) var(--easing);
+    }
+
+    /* ===== CARD STATES ===== */
+
+    /* Hover state (desktop only) */
+    @media (hover: hover) {
+      .card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 24px var(--color-shadow-hover);
+        border-color: var(--color-primary);
+      }
+    }
+
+    /* Expanded state (mobile toggle & desktop click) */
+    .card--expanded {
+      max-height: var(--card-max-height-expanded);
+      box-shadow: 0 8px 24px var(--color-shadow-hover);
+      border-color: var(--color-primary);
+    }
+
+    /* ===== CARD ICON ===== */
+    .card__icon {
+      width: clamp(48px, 12cqw, 64px);
+      height: clamp(48px, 12cqw, 64px);
+      background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-light) 100%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: transform var(--duration-fast) var(--easing),
+                  opacity var(--duration-fast) var(--easing);
+    }
+
+    .card--expanded .card__icon {
+      transform: scale(0.9);
+      opacity: 0.8;
+    }
+
+    .card__icon svg {
+      width: 50%;
+      height: 50%;
+      fill: white;
+    }
+
+    /* ===== FLUID TYPOGRAPHY WITH STABLE LINE BREAKS ===== */
+    .card__title {
+      /* Fluid font-size - adjust min/max in :root to control range */
+      font-size: clamp(
+        var(--font-size-h3-min),
+        0.875rem + 1.5vw,  /* Adjust vw multiplier for scaling rate */
+        var(--font-size-h3-max)
+      );
+
+      font-weight: 600;
+      color: var(--color-text);
+
+      /* Stable line breaks - prevent word jumping */
+      line-height: 1.2;  /* Tight but readable - adjust 1.1–1.3 */
+      text-wrap: balance;  /* Balance lines (modern browsers) */
+      text-wrap: pretty;   /* Fallback for better orphan prevention */
+      word-break: keep-all;  /* Don't break inside words */
+      hyphens: none;  /* No hyphenation */
+      overflow-wrap: break-word;  /* Break long URLs/emails if needed */
+
+      /* Prevent letter-spacing jitter */
+      letter-spacing: -0.01em;
+
+      /* Smooth transition */
+      transition:
+        font-size var(--duration-fast) var(--easing),
+        opacity var(--duration-fast) var(--easing),
+        transform var(--duration-fast) var(--easing);
+    }
+
+    /* Subtle style change when expanded */
+    .card--expanded .card__title {
+      opacity: 0.95;
+      transform: translateY(-2px);
+    }
+
+    /* ===== CARD DESCRIPTION ===== */
+    .card__description {
+      font-size: clamp(
+        var(--font-size-body-min),
+        0.8rem + 0.5vw,
+        var(--font-size-body-max)
+      );
+      color: var(--color-text-muted);
+      line-height: 1.6;
+      transition: opacity var(--duration-fast) var(--easing),
+                  transform var(--duration-fast) var(--easing);
+    }
+
+    /* Hide description when expanded on mobile */
+    @media (hover: none) {
+      .card--expanded .card__description {
+        opacity: 0;
+        transform: translateY(-8px);
+        pointer-events: none;
+      }
+    }
+
+    /* ===== CARD DETAILS (EXPANDED CONTENT) ===== */
+    .card__details {
+      opacity: 0;
+      max-height: 0;
+      overflow: hidden;
+      transform: translateY(10px);
+      transition:
+        opacity var(--duration-fast) var(--easing),
+        max-height var(--duration-fast) var(--easing),
+        transform var(--duration-fast) var(--easing);
+    }
+
+    .card--expanded .card__details {
+      opacity: 1;
+      max-height: 300px;  /* Adjust based on content */
+      transform: translateY(0);
+    }
+
+    .card__details ul {
+      list-style: none;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: clamp(0.5rem, 2cqw, 0.75rem);
+    }
+
+    .card__details li {
+      font-size: clamp(0.813rem, 0.75rem + 0.3vw, 0.938rem);
+      color: var(--color-text);
+      padding-left: 1.5em;
+      position: relative;
+
+      /* Staggered animation */
+      opacity: 0;
+      transform: translateY(10px);
+      transition:
+        opacity var(--duration-fast) var(--easing),
+        transform var(--duration-fast) var(--easing);
+    }
+
+    .card__details li::before {
+      content: '✓';
+      position: absolute;
+      left: 0;
+      color: var(--color-primary);
+      font-weight: bold;
+    }
+
+    /* Staggered entrance animation for list items */
+    .card--expanded .card__details li {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .card--expanded .card__details li:nth-child(1) { transition-delay: 50ms; }
+    .card--expanded .card__details li:nth-child(2) { transition-delay: 100ms; }
+    .card--expanded .card__details li:nth-child(3) { transition-delay: 150ms; }
+    .card--expanded .card__details li:nth-child(4) { transition-delay: 200ms; }
+    .card--expanded .card__details li:nth-child(5) { transition-delay: 250ms; }
+
+    /* ===== TOGGLE BUTTON ===== */
+    .card__toggle {
+      /* Button appears at bottom */
+      margin-top: auto;
+
+      background: transparent;
+      border: 2px solid transparent;
+      background-image: linear-gradient(white, white),
+                        linear-gradient(135deg, var(--color-primary), var(--color-primary-light));
+      background-origin: border-box;
+      background-clip: padding-box, border-box;
+
+      color: var(--color-primary);
+      font-size: clamp(0.875rem, 0.8rem + 0.3vw, 1rem);
+      font-weight: 500;
+
+      padding: clamp(0.625rem, 2cqw, 0.875rem) clamp(1rem, 4cqw, 1.5rem);
+      border-radius: 8px;
+
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+
+      transition:
+        color var(--duration-fast) var(--easing),
+        transform var(--duration-fast) var(--easing);
+
+      /* Ensure full keyboard support */
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .card__toggle::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light));
+      z-index: -1;
+      opacity: 0;
+      transition: opacity var(--duration-fast) var(--easing);
+    }
+
+    .card__toggle:hover::after,
+    .card__toggle:focus-visible::after {
+      opacity: 1;
+    }
+
+    .card__toggle:hover,
+    .card__toggle:focus-visible {
+      color: white;
+    }
+
+    .card__toggle:focus-visible {
+      outline: 2px solid var(--color-primary);
+      outline-offset: 2px;
+    }
+
+    .card__toggle:active {
+      transform: scale(0.98);
+    }
+
+    /* Hide toggle button on desktop hover-capable devices (optional) */
+    /* Uncomment to hide button on desktop:
+    @media (hover: hover) {
+      .card__toggle {
+        display: none;
+      }
+    }
+    */
+
+    /* ===== RESPONSIVE ADJUSTMENTS ===== */
+
+    /* Very small screens - tighter spacing */
+    @media (max-width: 360px) {
+      .card {
+        padding: 1rem;
+        gap: 0.75rem;
+      }
+    }
+
+    /* Desktop - wider cards can have more generous spacing */
+    @container card (min-width: 400px) {
+      .card {
+        padding: 2rem;
+        gap: 1.5rem;
+      }
+    }
+
+    /* Prevent layout shift - adjust max-height based on content */
+    @media (min-width: 768px) {
+      .card {
+        --card-max-height-collapsed: 450px;
+        --card-max-height-expanded: 650px;
+      }
+    }
+
+    /* ===== DEMO HEADER ===== */
+    .demo-header {
+      text-align: center;
+      margin-bottom: clamp(2rem, 5vw, 4rem);
+    }
+
+    .demo-header h1 {
+      font-size: clamp(1.75rem, 2rem + 2vw, 3rem);
+      margin-bottom: 0.5rem;
+      color: var(--color-text);
+    }
+
+    .demo-header p {
+      font-size: clamp(1rem, 0.9rem + 0.5vw, 1.25rem);
+      color: var(--color-text-muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="demo-header">
+    <h1>Fluid Typography Card Demo</h1>
+    <p>Resize your browser to see stable line breaks & proportional spacing</p>
+  </div>
+
+  <div class="card-grid">
+    <!-- Card 1 -->
+    <article class="card">
+      <div class="card__icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 2L13.09 8.26L20 9L14 14L15.18 21L12 19.77L8.82 21L10 14L4 9L10.91 8.26L12 2Z" fill="currentColor"/>
+        </svg>
+      </div>
+
+      <h3 class="card__title">Farmy fotowoltaiczne na lądzie</h3>
+
+      <p class="card__description">
+        Kompleksowy montaż farm fotowoltaicznych na terenach lądowych. Projektujemy i budujemy instalacje od małych farm po duże projekty przemysłowe.
+      </p>
+
+      <div class="card__details" id="details-1">
+        <ul>
+          <li>Prefab elementów konstrukcji</li>
+          <li>Wiercenie i kafarowanie (dobór technologii do gruntu)</li>
+          <li>Montaż konstrukcji i paneli</li>
+          <li>Kontrola jakości & przygotowanie dokumentacji</li>
+          <li>HSE / BHP i standardy UE</li>
+        </ul>
+      </div>
+
+      <button
+        class="card__toggle"
+        aria-expanded="false"
+        aria-controls="details-1"
+        data-label-expanded="zwiń"
+        data-label-collapsed="dowiedz się więcej"
+      >
+        dowiedz się więcej
+      </button>
+    </article>
+
+    <!-- Card 2 -->
+    <article class="card">
+      <div class="card__icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12Z" stroke="currentColor" stroke-width="2"/>
+          <path d="M8 18L16 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </div>
+
+      <h3 class="card__title">Wodne farmy fotowoltaiczne</h3>
+
+      <p class="card__description">
+        Specjalizujemy się w montażu farm PV na wodzie - innowacyjne rozwiązanie zwiększające efektywność i oszczędzające przestrzeń lądową.
+      </p>
+
+      <div class="card__details" id="details-2">
+        <ul>
+          <li>Wodowanie (logistyka na akwenie, proces wprowadzania platform na wodę)</li>
+          <li>Montaż platform i konstrukcji pływającej</li>
+          <li>Instalacja paneli na platformach</li>
+          <li>Kontrola jakości & dokumentacja</li>
+          <li>HSE / procedury na wodzie</li>
+        </ul>
+      </div>
+
+      <button
+        class="card__toggle"
+        aria-expanded="false"
+        aria-controls="details-2"
+        data-label-expanded="zwiń"
+        data-label-collapsed="dowiedz się więcej"
+      >
+        dowiedz się więcej
+      </button>
+    </article>
+
+    <!-- Card 3 -->
+    <article class="card">
+      <div class="card__icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 2L15 7L22 8L17 13L18 20L12 17L6 20L7 13L2 8L9 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+        </svg>
+      </div>
+
+      <h3 class="card__title">Doradztwo i zarządzanie</h3>
+
+      <p class="card__description">
+        Pełne wsparcie od koncepcji do uruchomienia - zapewniamy kompleksowe doradztwo i profesjonalne zarządzanie projektami fotowoltaicznymi.
+      </p>
+
+      <div class="card__details" id="details-3">
+        <ul>
+          <li>Harmonogram i koordynacja ekip/podwykonawców (FR/EN/PL)</li>
+          <li>Nadzór postępu, raportowanie, ryzyka, QA/QC</li>
+          <li>Współpraca z dostawcami i inspektorami</li>
+          <li>Organizacja odbiorów i kompletacja dokumentacji powykonawczej</li>
+          <li>Porozmawiajmy o zakresie</li>
+        </ul>
+      </div>
+
+      <button
+        class="card__toggle"
+        aria-expanded="false"
+        aria-controls="details-3"
+        data-label-expanded="zwiń"
+        data-label-collapsed="dowiedz się więcej"
+      >
+        dowiedz się więcej
+      </button>
+    </article>
+  </div>
+
+  <script>
+    // ===== VANILLA JS TOGGLE LOGIC (≤30 lines) =====
+
+    // Select all toggle buttons
+    const toggleButtons = document.querySelectorAll('.card__toggle');
+
+    toggleButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const card = button.closest('.card');
+        const isExpanded = card.classList.contains('card--expanded');
+        const labelCollapsed = button.dataset.labelCollapsed;
+        const labelExpanded = button.dataset.labelExpanded;
+
+        // Toggle card state
+        card.classList.toggle('card--expanded');
+
+        // Update ARIA
+        button.setAttribute('aria-expanded', !isExpanded);
+
+        // Swap button label
+        button.textContent = !isExpanded ? labelExpanded : labelCollapsed;
+      });
+
+      // Keyboard support (Enter/Space) is built-in for <button>
+      // Focus-visible styles defined in CSS
+    });
+
+    // Optional: Close expanded card when clicking outside (mobile UX)
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.card')) {
+        document.querySelectorAll('.card--expanded').forEach(card => {
+          card.classList.remove('card--expanded');
+          const btn = card.querySelector('.card__toggle');
+          btn.setAttribute('aria-expanded', 'false');
+          btn.textContent = btn.dataset.labelCollapsed;
+        });
+      }
+    });
+  </script>
+</body>
+</html>

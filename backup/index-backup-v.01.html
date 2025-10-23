@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hero Video Section</title>
+  <style>
+    :root {
+      /* Typography Sizes - Desktop */
+      --display-large: 57px; /* h1, var(--space-3xl) (48px), Główna hierarchia */
+      --display-medium: 45px; /* h2, var(--space-2xl) (40px), Podtytuł sekcji */
+      --display-small: 36px; /* h3, var(--space-xl) (32px), Sekcja lub dział */
+      --headline-large: 32px; /* h4, var(--space-lg) (24px), Blok lub grupa */
+      --headline-medium: 28px; /* h5, var(--space-lg) (24px), Niższy nagłówek */
+      --headline-small: 24px; /* h6, var(--space-md) (16px), Lokalne tytuły */
+      --title-large: 22px; /* subtitle, var(--space-md) (16px), Opis sekcji */
+      --title-medium: 16px; /* var(--space-sm) (12px), Etykiety, mniejsze opisy */
+      --title-small: 14px; /* var(--space-xs) (8px), Etykiety pomocnicze */
+      --label-large: 14px; /* var(--space-xs) (8px), Przyciski/labelki */
+      --label-medium: 12px; /* var(--space-2xs) (6px), Inputy/formularze */
+      --label-small: 11px; /* var(--space-2xs) (6px), Najdrobniejsze etykiety */
+      --body-large: 16px; /* paragraf, var(--space-md) (16px), główny tekst */
+      --body-medium: 14px; /* var(--space-sm) (12px), pomocniczy tekst */
+      --body-small: 12px; /* var(--space-xs) (8px), notatki/podpisy */
+ 
+      /* Typography Sizes - Tablet */
+      --display-large-t: 45px; /* h1, var(--space-2xl) (40px), Główna hierarchia */
+      --display-medium-t: 36px; /* h2, var(--space-xl) (32px), Podtytuł sekcji */
+      --display-small-t: 32px; /* h3, var(--space-lg) (24px), Sekcja lub dział */
+      --headline-large-t: 28px; /* h4, var(--space-lg) (24px), Blok lub grupa */
+      --headline-medium-t: 24px; /* h5, var(--space-md) (16px), Niższy nagłówek */
+      --headline-small-t: 22px; /* h6, var(--space-sm) (12px), Lokalne tytuły */
+      --title-large-t: 20px; /* subtitle, var(--space-sm) (12px), Opis sekcji */
+      --title-medium-t: 16px; /* var(--space-sm) (12px), Etykiety, mniejsze opisy */
+      --title-small-t: 14px; /* var(--space-xs) (8px), Etykiety pomocnicze */
+      --label-large-t: 14px; /* var(--space-xs) (8px), Przyciski/labelki */
+      --label-medium-t: 12px; /* var(--space-2xs) (6px), Inputy/formularze */
+      --label-small-t: 11px; /* var(--space-2xs) (6px), Najdrobniejsze etykiety */
+      --body-large-t: 16px; /* paragraf, var(--space-md) (16px), główny tekst */
+      --body-medium-t: 14px; /* var(--space-sm) (12px), pomocniczy tekst */
+      --body-small-t: 12px; /* var(--space-xs) (8px), notatki/podpisy */
+
+      /* Typography Sizes - Mobile */
+      --display-large-m: 36px; /* h1, var(--space-xl) */
+      --display-medium-m: 32px; /* h2, var(--space-lg) */
+      --display-small-m: 28px; /* h3, var(--space-md) */
+      --headline-large-m: 24px; /* h4, var(--space-sm) */
+      --headline-medium-m: 22px; /* h5, var(--space-sm) */
+      --headline-small-m: 20px; /* h6, var(--space-xs) */
+      --title-large-m: 18px; /* subtitle, var(--space-xs) */
+      --title-medium-m: 16px; /* var(--space-xs) */
+      --title-small-m: 14px; /* var(--space-xs) */
+      --label-large-m: 12px; /* var(--space-xs) */
+      --label-medium-m: 10px; /* var(--space-2xs) */
+      --label-small-m: 9px; /* var(--space-2xs) */
+      --body-large-m: 14px; /* p, var(--space-sm) */
+      --body-medium-m: 12px; /* p, var(--space-xs) */
+      --body-small-m: 11px; /* p, var(--space-2xs) */
+
+       /* Line Heights - Desktop */
+      --line-height-display-large: 1.1; /* h1, recommended line height (110%) */
+      --line-height-display-medium: 1.15; /* h2, recommended line height (115%) */
+      --line-height-display-small: 1.2; /* h3, recommended line height (120%) */
+      --line-height-headline-large: 1.25; /* h4, recommended line height (125%) */
+      --line-height-headline-medium: 1.3; /* h5, recommended line height (130%) */
+      --line-height-headline-small: 1.3; /* h6, recommended line height (130%) */
+      --line-height-title-large: 1.4; /* subtitle, recommended line height (140%) */
+      --line-height-title-medium: 1.4; /* recommended line height (140%) */
+      --line-height-title-small: 1.4; /* recommended line height (140%) */
+      --line-height-label-large: 1; /* recommended line height (120%) */
+      --line-height-label-medium: 1; /* recommended line height (120%) */
+      --line-height-label-small: 1; /* recommended line height (120%) */
+      --line-height-body-large: 1.5; /* paragraph, recommended line height (150%) */
+      --line-height-body-medium: 1.5; /* recommended line height (150%) */
+      --line-height-body-small: 1.5; /* recommended line height (150%) */
+
+      /* Spacing Scale */
+      --space-4xs: 2px;
+      --space-3xs: 4px;
+      --space-2xs: 6px;
+      --space-xs: 8px;
+      --space-sm: 12px;
+      --space-md: 16px;
+      --space-lg: 24px;
+      --space-xl: 32px;
+      --space-2xl: 40px;
+      --space-3xl: 48px;
+      --space-4xl: 64px;
+      --space-5xl: 80px;
+      --space-6xl: 96px;      
+
+      /* Primary Colors */
+      --primary-base: #ceb37c;
+      --primary-dark: #a58f63;
+      --primary-very-dark: #3e3625;
+      --primary-light: #f5f0e5;
+      --primary-very-light: #faf7f2;
+ 
+      /* Secondary Colors */
+      --secondary-base: #cca848;
+      --secondary-dark: #a3863a;
+      --secondary-very-dark: #3d3216;
+      --secondary-light: #f5eeda;
+      --secondary-very-light: #faf6ed;
+ 
+      /* Tertiary Colors */
+      --tertiary-base: #161619;
+      --tertiary-dark: #121214;
+      --tertiary-very-dark: #070707;
+      --tertiary-light: #d0d0d1;
+      --tertiary-very-light: #e8e8e8;
+ 
+      /* Neutral Colors */
+      --neutral-base: #7c7c80;
+      --neutral-dark: #3e3e40;
+      --neutral-very-dark: #19191a;
+      --neutral-black: #000000;
+      --neutral-light: #cbcbcc;
+      --neutral-very-light: #e5e5e6;
+      --neutral-extra-light: #f2f2f2;
+      --neutral-white: #ffffff;
+ 
+      /* State Colors */
+      --success: #67bd50;
+      --error: #f2342b;
+      --warning: #ffa92a;
+ 
+      /* Additional */
+      --light-yellow: #e0d970;
+      --pink: #e070c8;
+      --teal: #08d4ef;
+ 
+      /* Gradients (as background-image) */
+      --gradient-vertical-1-to-2: linear-gradient(180deg, #ceb37c 0%, #cca848 100%);
+      --gradient-vertical-1-to-3: linear-gradient(180deg, #ceb37c 0%, #82714e 100%);
+      --gradient-vertical-2-to-3: linear-gradient(180deg, #cca848 0%, #82714e 100%);
+      --gradient-horizontal-1-to-2: linear-gradient(120.96deg, #ceb37c 0%, #cca848 100%);
+      --gradient-horizontal-1-to-3: linear-gradient(120.96deg, #ceb37c 0%, #82714e 100%);
+      --gradient-horizontal-2-to-3: linear-gradient(120.96deg, #cca848 0%, #82714e 100%);
+      --gradient-diagonal-1-to-2: linear-gradient(101.31deg, #ceb37c 0%, #cca848 100%);
+      --gradient-diagonal-1-to-3: linear-gradient(101.31deg, #ceb37c 0%, #82714e 100%);
+      --gradient-diagonal-2-to-3: linear-gradient(101.31deg, #cca848 0%, #82714e 100%);
+      --gradient-horizontal-fade-white: linear-gradient(120.96deg, #ffffff 0%, #ceb37c 100%);
+      --gradient-horizontal-fade-black: linear-gradient(120.96deg, #000000 0%, #82714e 100%);
+      --font-display: "SF Pro Display", sans-serif;
+      --font-rest: "SF Pro Rounded", sans-serif;
+    }
+    @media (max-width: 991px) {
+      :root {
+        --display-large: var(--display-large-t);
+        --display-medium: var(--display-medium-t);
+        --display-small: var(--display-small-t);
+        --headline-large: var(--headline-large-t);
+        --headline-medium: var(--headline-medium-t);
+        --headline-small: var(--headline-small-t);
+        --title-large: var(--title-large-t);
+        --title-medium: var(--title-medium-t);
+        --title-small: var(--title-small-t);
+        --label-large: var(--label-large-t);
+        --label-medium: var(--label-medium-t);
+        --label-small: var(--label-small-t);
+        --body-large: var(--body-large-t);
+        --body-medium: var(--body-medium-t);
+        --body-small: var(--body-small-t);
+      }
+    }
+  
+    @media (max-width: 599px) {
+      :root {
+        --display-large: var(--display-large-m);
+        --display-medium: var(--display-medium-m);
+        --display-small: var(--display-small-m);
+        --headline-large: var(--headline-large-m);
+        --headline-medium: var(--headline-medium-m);
+        --headline-small: var(--headline-small-m);
+        --title-large: var(--title-large-m);
+        --title-medium: var(--title-medium-m);
+        --title-small: var(--title-small-m);
+        --label-large: var(--label-large-m);
+        --label-medium: var(--label-medium-m);
+        --label-small: var(--label-small-m);
+        --body-large: var(--body-large-m);
+        --body-medium: var(--body-medium-m);
+        --body-small: var(--body-small-m);
+      }
+    }
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--tertiary-very-light);
+      font-family: var(--font-rest);
+      color: #333;
+      overflow-x: hidden;
+    }
+       
+    h1, h2, h3, h4, h5, h6, p {
+      margin: 0;
+      padding: 0;
+    }
+
+    /* CSS slider-section */
+
+    .slider-section {
+      position: relative;
+      padding-top: 5px;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      box-shadow: inset 0 -10px 12px 1px rgba(0, 0, 0, 0.15);
+    }
+
+    .slider-container {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      margin: 0px 20px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+    }
+    @media (max-width: 599px) {
+      .slider-container {
+        margin: 0px 10px;
+      }
+    }
+
+    .slider-section .card {
+      height: 75%;
+      margin: 0px 20px;
+      background: rgb(147, 20, 20);
+      border-radius: 24px;
+      box-shadow: 0px 6px 9px 0px rgba(0, 0, 0, 0.25);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+    }
+
+    @media (max-width: 991px) {
+      .slider-section .card {
+        margin: 0px 20px;
+      }
+    }
+    
+    @media (max-width: 599px) {
+      .slider-section .card {
+        margin: 0px 10px;
+      }
+    }
+
+    .slider-section .center-cta {
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 2rem;
+      width: 100%;
+      color: var(--neutral-light);
+    }
+
+    .slider-section .center-cta h2 {
+      font-size: var(--display-medium);
+      line-height: var(--line-height-display-medium);
+      margin-bottom: var(--space-md);
+      margin-top: 100px;
+    }
+
+    .slider-section .center-cta p {
+      font-size: var(--body-large);
+      line-height: var(--line-height-body-large);
+      margin-bottom: var(--space-md);
+    }
+
+    .slider-section .center-cta a {
+      display: inline-block;
+      background-color: var(--neutral-white);
+      color: var(--neutral-black);
+      font-size: var(--label-large);
+      font-weight: 500;
+      text-decoration: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      transition: background-color 0.3s;
+    }
+
+    .slider-section .center-cta a:hover {
+      background-color: var(--neutral-very-light);
+      color: var(--neutral-black);
+    }
+
+    .slider-section .intro-overlay {
+      position: absolute;
+      inset: 0;
+      background-color: var(--neutral-dark);
+      color: var(--neutral-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 20;
+      opacity: 0;
+      animation: introFadeIn 0s ease-in forwards, introFadeOut 1s ease-in 4s forwards;
+    }
+
+    @keyframes introFadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes introFadeOut {
+      to {
+        opacity: 0;
+        visibility: hidden;
+        transform: scale(1.02);
+      }
+    }
+
+    .slider-section .intro-logo-wrap {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      min-width: 400px;
+      min-height: 120px;
+    }
+
+    .slider-section .intro-logo-wrap h2{
+      margin: 0;
+    }
+
+    .slider-section .logo-square {
+      width: 100px;
+      height: 100px;
+      min-width: 100px;
+      min-height: 100px;
+      background-color: var(--neutral-light);
+      border-radius: 8px;
+      flex-shrink: 0;
+    }
+
+    @media (max-width: 991px) {
+      .slider-section .logo-square {
+        margin-left: 40px;
+      }
+    }
+
+    @media (max-width: 599px) {
+      .slider-section .intro-logo-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2rem;
+      min-width: 400px;
+      min-height: 120px;
+
+    }
+
+    .slider-section .intro-logo-wrap h2{
+      margin: 0;
+    }
+
+    .slider-section .logo-square {
+      width: 100px;
+      height: 100px;
+      min-width: 100px;
+      min-height: 100px;
+      background-color: var(--neutral-light);
+      border-radius: 8px;
+      flex-shrink: 0;
+      margin: 0;
+      }
+    }
+
+    .slider-section .typing-text {
+      overflow: hidden; 
+      white-space: nowrap;
+      display: block;
+      margin-bottom: 0;
+    }
+
+    .slider-section .typing-text .line1 {
+      font-size: var(--display-medium) !important;
+      font-weight: 700;
+      color: var(--neutral-light);
+      display: inline-block;
+      overflow: hidden;
+      white-space: nowrap;
+      width: 0;
+      animation: typing1 1.5s steps(30, end) 1s forwards;
+    }
+
+    @keyframes typing1 {
+      to { width: 245px; }
+    }
+
+    @media (max-width: 991px) {
+      @keyframes typing1 {
+      to { width: 195px; }
+    }
+    }
+
+    @media (max-width: 599px) {
+      @keyframes typing1 {
+      to { width: 175px; }
+    }
+    }
+
+  
+  .fade-in-item {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+
+.fade-in-ready .fade-in-item {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.dots.fade-in-item {
+  transform: translateY(-100%);
+  opacity: 0;
+  transition: transform 1s ease, opacity 1s ease;
+}
+  
+  .fix {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  .animated-data {
+    height: 25%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .stats {
+  width: 100%;
+  max-width: 1200px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  /* gap: 6rem; */
+  padding: 2rem 1rem;
+  padding-right: 70px;
+  text-align: center;
+}
+@media (max-width: 991px) {
+  .stats {
+    padding-right: 80px;
+  }
+}
+@media (max-width: 599px) {
+  .stats {
+    padding: 0;
+    padding-right: 65px;
+  }
+  .stat.to-fix {
+    padding-left: 20px;
+  }
+}
+
+.stat .count {
+  font-size: var(--display-large);
+  font-weight: bold;
+  color: var(--neutral-black);
+  transition: all 0.3s ease;
+}
+
+.stat p {
+  font-size: var(--body-large);
+  color: var(--neutral-base);
+  margin-top: 0.5rem;
+}
+
+
+  /* CSS slider-section */
+
+
+  </style>
+</head>
+<body>
+
+  <section class="hero-section slider-section">
+    <div class="slider-container">
+        <!-- KARTA 1 -->
+        <div class="card center-cta">
+          <div class="fade-in-item center-cta fix">
+            <h2>Witamy w zielonym świecie</h2>
+            <p>Odkryj świeżość, naturę i lekkość w naszym stylu.</p>
+            <a href="#">Zacznij teraz</a>
+          </div>
+          <div class="intro-overlay" id="intro-animation">
+            <div class="intro-logo-wrap">
+              <div class="logo-square"></div>
+              <h2 class="typing-text"><span class="line1">twoja firma.</span></h2>
+            </div>
+          </div>
+        </div>
+        <div class="animated-data fade-in-item">
+          <div class="stats">
+            <div class="stat to-fix">
+              <div class="count" data-target="120">0</div>
+              <p>Zainstalowane MW</p>
+            </div>
+            <div class="stat">
+              <div class="count" data-target="240">0</div>
+              <p>Zrealizowane projekty</p>
+            </div>
+            <div class="stat">
+              <div class="count" data-target="60">0</div>
+              <p>Partnerzy</p>
+            </div>
+          </div>
+</div>
+    </div>
+  </section>
+
+
+  <script>
+
+    // JS slider-section
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const root = document.querySelector(".hero-section");
+  
+          setTimeout(() => {
+            const intro = root.querySelector("#intro-animation");
+            if (intro) {
+              intro.style.display = "none";
+              intro.style.pointerEvents = "none";
+              intro.style.zIndex = "-1";
+            }
+            root.querySelectorAll(".fade-lock").forEach(el => el.classList.remove("fade-lock"));
+            document.body.classList.add("fade-in-ready");
+          }, 2000);
+
+      
+        });
+    
+    // Liczniki animowane
+    document.addEventListener("DOMContentLoaded", () => {
+      const counters = document.querySelectorAll(".count");
+      counters.forEach(counter => {
+        const updateCount = () => {
+          const target = +counter.getAttribute("data-target");
+          const current = parseInt(counter.innerText) || 0;
+          const increment = Math.max(1, Math.ceil(target / 100));
+
+          if (current < target) {
+            counter.innerText = current + increment;
+            setTimeout(updateCount, 25);
+          } else {
+            counter.innerText = target;
+          }
+        };
+        updateCount();
+      });
+    });
+
+    // JS slider-section
+
+    
+    </script>
+
+</body>
+</html>
