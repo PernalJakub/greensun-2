@@ -2576,12 +2576,12 @@
   /* ===== GALERIA ===== */
   .gallery-section {
     padding: var(--space-6xl) var(--space-lg);
-    background: var(--bg-primary);
+    background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
     overflow: hidden;
   }
 
   .gallery-container {
-    max-width: 1200px;
+    max-width: 1400px;
     margin: 0 auto;
   }
 
@@ -2596,234 +2596,306 @@
     margin-bottom: var(--space-md);
   }
 
-  .gallery-controls {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: var(--space-xl);
-    margin-bottom: var(--space-xl);
-    flex-wrap: wrap;
-  }
-
-  .gallery-filters {
-    display: flex;
-    justify-content: center;
-    gap: var(--space-sm);
-    flex-wrap: wrap;
-  }
-
-  .gallery-nav {
-    display: flex;
-    gap: var(--space-sm);
-    align-items: center;
-  }
-
-  .gallery-nav-btn {
-    width: 40px;
-    height: 40px;
-    border: 2px solid var(--primary-base);
-    background: var(--surface-primary);
-    color: var(--text-primary);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.3s ease;
-  }
-
-  .gallery-nav-btn:hover {
-    background: var(--primary-base);
-    color: #ffffff;
-  }
-
-  .gallery-nav-btn:disabled {
-    opacity: 0.3;
-    cursor: not-allowed;
-    background: var(--surface-primary);
-    color: var(--text-muted);
-  }
-
-  .gallery-nav-btn svg {
-    width: 20px;
-    height: 20px;
-    fill: currentColor;
-  }
-
-  @media (max-width: 599px) {
-    .gallery-controls {
-      flex-direction: column;
-      gap: var(--space-lg);
-    }
-  }
-
-  .filter-btn {
-    background: transparent;
-    border: 2px solid transparent;
+  .gallery-header p {
+    font-size: var(--body-large);
     color: var(--text-secondary);
-    padding: var(--space-sm) var(--space-lg);
-    border-radius: 24px;
-    font-size: var(--label-large);
-    cursor: pointer;
-    transition: color 0.3s ease;
+  }
+
+  /* Carousel Container */
+  .carousel-container {
     position: relative;
-    overflow: hidden;
-    z-index: 1;
-  }
-
-  .filter-btn::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    border-radius: 24px;
-    border: 2px solid transparent;
-    background: linear-gradient(135deg, #1fc55c 0%, #2de3b9 100%) border-box;
-    -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
-    -webkit-mask-composite: xor;
-    mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
-    mask-composite: exclude;
-    pointer-events: none;
-    z-index: -1;
-  }
-
-  .filter-btn::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    width: 0;
-    background: linear-gradient(135deg, #1fc55c 0%, #2de3b9 100%);
-    border-radius: 22px;
-    transition: width 0.4s ease;
-    z-index: -1;
-  }
-
-  .filter-btn.active,
-  .filter-btn:hover {
-    color: white;
-  }
-
-  .filter-btn.active::after,
-  .filter-btn:hover::after {
-    width: 100%;
-  }
-
-  .gallery-slider-container {
-    position: relative;
-    overflow: hidden;
-    margin: 0 -var(--space-lg);
-  }
-
-  .gallery-grid {
-    display: flex;
-    gap: var(--space-lg);
-    transition: transform 0.4s ease;
-    padding: 0 var(--space-lg);
-    cursor: grab;
-    user-select: none;
-  }
-  
-  .gallery-grid:active {
-    cursor: grabbing;
-  }
-
-  .gallery-grid.transitioning {
-    transition: transform 0.4s ease;
-  }
-
-  .gallery-item {
-    position: relative;
-    border-radius: 12px;
-    overflow: hidden;
-    aspect-ratio: 4/3;
-    background: var(--neutral-extra-light);
-    cursor: pointer;
-    transition: transform 0.3s ease;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: var(--body-small);
-    color: var(--neutral-base);
-    flex: 0 0 350px;
-    min-width: 350px;
+    gap: 1rem;
+    padding: 2rem 0;
+    max-width: 1400px;
+    margin: 0 auto;
   }
 
-  @media (max-width: 991px) {
-    .gallery-item {
-      flex: 0 0 320px;
-      min-width: 320px;
-    }
+  /* Carousel Tiles */
+  .carousel-tile {
+    height: 400px;
+    border-radius: 24px;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.5s ease,
+                box-shadow 0.5s ease,
+                transform 0.2s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    width: 120px;
+    opacity: 0.6;
+    flex-shrink: 0;
+    will-change: width, opacity;
   }
 
-  @media (max-width: 991px) {
-    .gallery-grid {
-      gap: var(--space-md);
-    }
-  }
-
-  @media (max-width: 599px) {
-    .gallery-item {
-      flex: 0 0 300px;
-      min-width: 300px;
-    }
-    
-    .gallery-slider-container {
-      margin: 0 -var(--space-md);
-    }
-    
-    .gallery-grid {
-      padding: 0 var(--space-md);
-      gap: var(--space-sm);
-    }
-  }
-
-  .gallery-item:hover {
-    transform: scale(1.02);
-  }
-
-  .gallery-item::after {
+  .carousel-tile::before {
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(transparent 60%, rgba(0,0,0,0.7));
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 5%, rgba(0, 0, 0, 0.5) 15%, transparent 100%);
     opacity: 0;
-    transition: opacity 0.3s ease;
+    transition: opacity 0.5s ease;
+    z-index: 1;
   }
 
-  .gallery-item:hover::after {
-    opacity: 1;
-  }
-
-  .gallery-item-info {
+  .carousel-tile::after {
+    content: '';
     position: absolute;
-    bottom: var(--space-md);
-    left: var(--space-md);
-    right: var(--space-md);
-    color: white;
-    opacity: 0;
-    transform: translateY(20px);
-    transition: all 0.3s ease;
+    inset: 0;
+    background: linear-gradient(to bottom, transparent 40%, rgba(0, 0, 0, 0.3));
+    z-index: 0;
+  }
+
+  /* Active tile (main display) */
+  .carousel-tile.active {
+    width: 600px;
+    opacity: 1;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
     z-index: 2;
   }
 
-  .gallery-item:hover .gallery-item-info {
+  .carousel-tile.active::before {
+    opacity: 1;
+  }
+
+  .carousel-tile.active::after {
+    opacity: 0;
+  }
+
+  /* Inactive tiles (side previews) */
+  .carousel-tile:not(.active):hover {
+    opacity: 1;
+    transform: scale(1.03);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+  }
+
+  /* Caption overlay */
+  .carousel-tile-caption {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 1.5rem 2rem;
+    color: white;
+    z-index: 2;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+
+  .carousel-tile.active .carousel-tile-caption {
     opacity: 1;
     transform: translateY(0);
   }
 
-  .gallery-item-title {
-    font-size: var(--title-medium);
-    font-weight: 600;
-    margin-bottom: var(--space-2xs);
+  .carousel-tile-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+    color: var(--neutral-white);
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
-  .gallery-item-location {
-    font-size: var(--body-small);
-    opacity: 0.9;
+  .carousel-tile-subtitle {
+    font-size: 1rem;
+    opacity: 0.95;
+    color: var(--neutral-light);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+
+  /* Dots Navigation */
+  .carousel-dots {
+    display: flex;
+    justify-content: center;
+    gap: 0.75rem;
+    margin-top: 2rem;
+  }
+
+  .carousel-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #d0d0d0;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    padding: 0;
+  }
+
+  .carousel-dot.active {
+    background: var(--primary-base);
+    width: 32px;
+    border-radius: 6px;
+  }
+
+  .carousel-dot:hover {
+    background: var(--primary-base);
+    opacity: 0.7;
+  }
+
+  /* Mobile Responsive */
+  @media (max-width: 1023px) {
+    .carousel-tile {
+      width: 80px;
+      height: 300px;
+      border-radius: 24px;
+    }
+
+    .carousel-tile.active {
+      width: 450px;
+    }
+
+    .carousel-tile-title {
+      font-size: 1.25rem;
+    }
+
+    .carousel-tile-subtitle {
+      font-size: 0.875rem;
+    }
+
+    .carousel-container {
+      gap: 0.75rem;
+    }
+  }
+
+  @media (max-width: 767px) {
+    .carousel-container {
+      gap: 0.5rem;
+      overflow: hidden;
+      touch-action: pan-y;
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .carousel-tile {
+      height: 450px;
+      border-radius: 24px;
+      transition: width 0.45s cubic-bezier(0.4, 0, 0.2, 1),
+                  opacity 0.45s cubic-bezier(0.4, 0, 0.2, 1),
+                  box-shadow 0.45s cubic-bezier(0.4, 0, 0.2, 1),
+                  margin 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+      flex-shrink: 0;
+      will-change: width;
+    }
+
+    /* Position-based classes */
+    .carousel-tile.tile-hidden-left {
+      width: 0;
+      opacity: 0;
+      margin: 0;
+      display: none;
+    }
+
+    .carousel-tile.tile-hidden-right {
+      width: 0;
+      opacity: 0;
+      margin: 0;
+      display: none;
+    }
+
+    .carousel-tile.tile-side-left {
+      width: 70px;
+      opacity: 0.6;
+    }
+
+    .carousel-tile.tile-side-right {
+      width: 70px;
+      opacity: 0.6;
+    }
+
+    .carousel-tile.active {
+      width: calc(100vw - 156px);
+      max-width: 450px;
+      height: 450px;
+      opacity: 1;
+    }
+
+    /* Transitioning states for smooth gap maintenance */
+    .carousel-tile.transitioning-to-active {
+      width: calc(100vw - 156px);
+      max-width: 450px;
+      opacity: 1;
+    }
+
+    .carousel-tile.transitioning-to-side {
+      width: 70px;
+      opacity: 0.6;
+    }
+
+    .carousel-tile.transitioning-to-hidden {
+      width: 0;
+      opacity: 0;
+      margin: 0;
+    }
+
+    .carousel-tile-caption {
+      padding: 1rem 1.5rem;
+      transition: opacity 0.45s ease, transform 0.45s ease;
+    }
+
+    .carousel-tile-title {
+      font-size: 1.125rem;
+    }
+
+    .carousel-tile-subtitle {
+      font-size: 0.875rem;
+    }
+  }
+
+  @media (max-width: 599px) {
+    .gallery-section {
+      padding: var(--space-5xl) var(--space-md);
+    }
+
+    .carousel-container {
+      gap: 0.4rem;
+    }
+
+    .carousel-tile {
+      height: 400px;
+      transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                  opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                  box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                  margin 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      will-change: width;
+    }
+
+    .carousel-tile.tile-side-left,
+    .carousel-tile.tile-side-right {
+      width: 60px;
+    }
+
+    .carousel-tile.active {
+      width: calc(100vw - 136px);
+      max-width: 400px;
+      height: 400px;
+    }
+
+    .carousel-tile.transitioning-to-active {
+      width: calc(100vw - 136px);
+      max-width: 400px;
+    }
+
+    .carousel-tile.transitioning-to-side {
+      width: 60px;
+    }
+
+    .carousel-tile-caption {
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
   }
 
   /* ===== DLACZEGO MY ===== */
@@ -3945,84 +4017,22 @@
   <section class="gallery-section" id="gallery-section">
     <div class="gallery-container">
       <div class="gallery-header fade-in-scroll">
-        <h2 data-i18n="gallery-title">Montaż farm <span class="green-simple">gruntowy i na wodzie</span></h2>
-        <p data-i18n="gallery-desc">Poniższe obrazy to wizualizacje poglądowe (nie przedstawiają konkretnych realizacji). Pokazują typowe układy konstrukcji na gruncie i na wodzie.</p>
+        <h2 data-i18n="gallery-title">Nasze <span class="green-simple">realizacje</span></h2>
+        <p data-i18n="gallery-desc">Profesjonalne instalacje fotowoltaiczne w Polsce i Europie</p>
       </div>
-      
-      <!-- UWAGA DEV: Folder assets/visuals/ z placeholderami visual-01.webp, visual-02.webp, etc. -->
-      <div class="gallery-controls">
-        <div class="gallery-filters">
-          <button class="filter-btn active" data-filter="all" data-i18n="filter-all">Wszystkie</button>
-          <button class="filter-btn" data-filter="ground" data-i18n="filter-ground">Grunt</button>
-          <button class="filter-btn" data-filter="water" data-i18n="filter-water">Woda</button>
-          <button class="filter-btn" data-filter="details" data-i18n="filter-details">Detale konstrukcji</button>
-        </div>
-        
-        <div class="gallery-nav">
-          <button class="gallery-nav-btn" id="gallery-prev" disabled>
-            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </button>
-          <button class="gallery-nav-btn" id="gallery-next">
-            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </button>
-        </div>
+
+      <!-- Carousel Container -->
+      <div class="carousel-container">
+        <!-- Carousel Tiles -->
+        <div class="carousel-tile" data-position="0"></div>
+        <div class="carousel-tile" data-position="1"></div>
+        <div class="carousel-tile active" data-position="2"></div>
+        <div class="carousel-tile" data-position="3"></div>
+        <div class="carousel-tile" data-position="4"></div>
       </div>
-      
-      <div class="gallery-slider-container">
-        <div class="gallery-grid" id="gallery-grid">
-        <!-- Placeholder items - tutaj dodaj prawdziwe zdjęcia -->
-        <div class="gallery-item" data-category="land europe">
-          <div class="gallery-item-info">
-            <div class="gallery-item-title" data-i18n="gallery-france">Farma PV Francja</div>
-            <div class="gallery-item-location" data-i18n="gallery-france-desc">200 MW • Francja</div>
-          </div>
-          Zdjęcie farmy we Francji
-        </div>
-        
-        <div class="gallery-item" data-category="water europe">
-          <div class="gallery-item-info">
-            <div class="gallery-item-title" data-i18n="gallery-water">Wodna farma PV</div>
-            <div class="gallery-item-location" data-i18n="gallery-water-desc">150 MW • Holandia</div>
-          </div>
-          Największa wodna farma w Europie
-        </div>
-        
-        <div class="gallery-item" data-category="land poland">
-          <div class="gallery-item-info">
-            <div class="gallery-item-title" data-i18n="gallery-poland">Farma PV Polska</div>
-            <div class="gallery-item-location" data-i18n="gallery-poland-desc">100 MW • Polska</div>
-          </div>
-          Farma lądowa w Polsce
-        </div>
-        
-        <div class="gallery-item" data-category="water poland">
-          <div class="gallery-item-info">
-            <div class="gallery-item-title" data-i18n="gallery-water-poland">Wodna farma Polska</div>
-            <div class="gallery-item-location" data-i18n="gallery-water-poland-desc">75 MW • Polska</div>
-          </div>
-          Innowacyjna farma na zbiorniku wodnym
-        </div>
-        
-        <div class="gallery-item" data-category="land europe">
-          <div class="gallery-item-info">
-            <div class="gallery-item-title" data-i18n="gallery-germany">Farma PV Niemcy</div>
-            <div class="gallery-item-location" data-i18n="gallery-germany-desc">300 MW • Niemcy</div>
-          </div>
-          Duża instalacja w Niemczech
-        </div>
-        
-        <div class="gallery-item" data-category="water europe">
-          <div class="gallery-item-info">
-            <div class="gallery-item-title" data-i18n="gallery-floating">Pływająca farma</div>
-            <div class="gallery-item-location" data-i18n="gallery-floating-desc">120 MW • Belgia</div>
-          </div>
-          Innowacyjne rozwiązanie wodne
-        </div>
-      </div>
+
+      <!-- Dots Navigation -->
+      <div class="carousel-dots"></div>
     </div>
   </section>
 
@@ -4971,12 +4981,384 @@ document.addEventListener("DOMContentLoaded", () => {
     document.addEventListener("DOMContentLoaded", () => {
       loadGlobalSVGIcons();
       initScrollAnimations();
-      initGalleryFilters();
+      initGalleryCarousel();
       initContactForm();
       showCookieBanner();
       initNavbarSection();
     });
-    
+
+    // ===== GALLERY CAROUSEL =====
+    function initGalleryCarousel() {
+      const carouselData = [
+        {
+          src: 'https://images.unsplash.com/photo-1509391366360-2e959784a276?w=800',
+          title: 'Pile driving',
+          subtitle: 'Ground-mounted farm'
+        },
+        {
+          src: 'https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?w=800',
+          title: 'Panel installation',
+          subtitle: 'Rooftop project'
+        },
+        {
+          src: 'https://images.unsplash.com/photo-1466611653911-95081537e5b7?w=800',
+          title: 'Solar farm',
+          subtitle: 'Large-scale installation'
+        },
+        {
+          src: 'https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?w=800',
+          title: 'Mounting structures',
+          subtitle: 'Ground-mounted farm'
+        },
+        {
+          src: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800',
+          title: 'Water farm',
+          subtitle: 'Floating solar panels'
+        }
+      ];
+
+      let currentActiveIndex = 2; // Start with middle tile active (index 2 out of 0-4)
+      let currentCenterDataIndex = 2; // Which data index is currently in center
+      let touchStartX = 0;
+      let touchEndX = 0;
+
+      const tiles = document.querySelectorAll('.carousel-tile');
+      const dotsContainer = document.querySelector('.carousel-dots');
+      const carouselContainer = document.querySelector('.carousel-container');
+
+      // Track tile positions for mobile
+      let tilePositions = [0, 1, 2, 3, 4]; // Physical positions of tiles
+
+      // Initialize tiles with images and captions
+      function initTiles() {
+        tiles.forEach((tile, index) => {
+          const dataIndex = index % carouselData.length;
+          const data = carouselData[dataIndex];
+
+          // Set background image
+          tile.style.backgroundImage = `url('${data.src}')`;
+
+          // Add caption
+          const caption = document.createElement('div');
+          caption.className = 'carousel-tile-caption';
+          caption.innerHTML = `
+            <div class="carousel-tile-title">${data.title}</div>
+            <div class="carousel-tile-subtitle">${data.subtitle}</div>
+          `;
+          tile.appendChild(caption);
+
+          // Store data index
+          tile.dataset.dataIndex = dataIndex;
+
+          // Click handler
+          tile.addEventListener('click', () => {
+            if (!tile.classList.contains('active')) {
+              setActiveTile(index);
+            }
+          });
+        });
+      }
+
+      // Initialize dots
+      function initDots() {
+        dotsContainer.innerHTML = carouselData.map((_, index) =>
+          `<button class="carousel-dot ${index === 0 ? 'active' : ''}" data-index="${index}"></button>`
+        ).join('');
+
+        dotsContainer.querySelectorAll('.carousel-dot').forEach(dot => {
+          dot.addEventListener('click', () => {
+            goToDataIndex(parseInt(dot.dataset.index));
+          });
+        });
+      }
+
+      // Set active tile by tile position (0-3)
+      function setActiveTile(tileIndex) {
+        // Remove active from all tiles
+        tiles.forEach(tile => tile.classList.remove('active'));
+
+        // Add active to selected tile
+        tiles[tileIndex].classList.add('active');
+
+        // Update current active index
+        currentActiveIndex = tileIndex;
+
+        // Update dots based on data index
+        updateDots();
+      }
+
+      // Go to specific data index (from dots)
+      function goToDataIndex(dataIndex) {
+        // Find which tile currently shows this data
+        let targetTileIndex = -1;
+        tiles.forEach((tile, index) => {
+          if (parseInt(tile.dataset.dataIndex) === dataIndex) {
+            targetTileIndex = index;
+          }
+        });
+
+        if (targetTileIndex !== -1 && targetTileIndex !== currentActiveIndex) {
+          setActiveTile(targetTileIndex);
+        }
+      }
+
+      // Update dots based on active tile's data index
+      function updateDots() {
+        const activeDataIndex = parseInt(tiles[currentActiveIndex].dataset.dataIndex);
+        document.querySelectorAll('.carousel-dot').forEach((dot, index) => {
+          dot.classList.toggle('active', index === activeDataIndex);
+        });
+      }
+
+      // Navigate next
+      function nextSlide() {
+        // Rotate tiles: move last tile's data to first, shift all data right
+        const lastTileData = tiles[4].dataset.dataIndex;
+
+        // Shift data from right to left
+        for (let i = 4; i > 0; i--) {
+          tiles[i].dataset.dataIndex = tiles[i - 1].dataset.dataIndex;
+          tiles[i].style.backgroundImage = tiles[i - 1].style.backgroundImage;
+
+          const caption = tiles[i].querySelector('.carousel-tile-caption');
+          const prevCaption = tiles[i - 1].querySelector('.carousel-tile-caption');
+          if (caption && prevCaption) {
+            caption.innerHTML = prevCaption.innerHTML;
+          }
+        }
+
+        // Set first tile with next data in sequence
+        const newDataIndex = (parseInt(lastTileData) + 1) % carouselData.length;
+        const newData = carouselData[newDataIndex];
+        tiles[0].dataset.dataIndex = newDataIndex;
+        tiles[0].style.backgroundImage = `url('${newData.src}')`;
+
+        const firstCaption = tiles[0].querySelector('.carousel-tile-caption');
+        if (firstCaption) {
+          firstCaption.innerHTML = `
+            <div class="carousel-tile-title">${newData.title}</div>
+            <div class="carousel-tile-subtitle">${newData.subtitle}</div>
+          `;
+        }
+
+        // Keep active tile at same position (visual stays in center)
+        updateDots();
+      }
+
+      // Navigate previous
+      function prevSlide() {
+        // Rotate tiles: move first tile's data to last, shift all data left
+        const firstTileData = tiles[0].dataset.dataIndex;
+
+        // Shift data from left to right
+        for (let i = 0; i < 4; i++) {
+          tiles[i].dataset.dataIndex = tiles[i + 1].dataset.dataIndex;
+          tiles[i].style.backgroundImage = tiles[i + 1].style.backgroundImage;
+
+          const caption = tiles[i].querySelector('.carousel-tile-caption');
+          const nextCaption = tiles[i + 1].querySelector('.carousel-tile-caption');
+          if (caption && nextCaption) {
+            caption.innerHTML = nextCaption.innerHTML;
+          }
+        }
+
+        // Set last tile with previous data in sequence
+        const newDataIndex = (parseInt(firstTileData) - 1 + carouselData.length) % carouselData.length;
+        const newData = carouselData[newDataIndex];
+        tiles[4].dataset.dataIndex = newDataIndex;
+        tiles[4].style.backgroundImage = `url('${newData.src}')`;
+
+        const lastCaption = tiles[4].querySelector('.carousel-tile-caption');
+        if (lastCaption) {
+          lastCaption.innerHTML = `
+            <div class="carousel-tile-title">${newData.title}</div>
+            <div class="carousel-tile-subtitle">${newData.subtitle}</div>
+          `;
+        }
+
+        // Keep active tile at same position
+        updateDots();
+      }
+
+      // Keyboard navigation
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowLeft') prevSlide();
+        if (e.key === 'ArrowRight') nextSlide();
+      });
+
+      // Touch/swipe support with visual sliding
+      let isDragging = false;
+      let currentTranslate = 0;
+      let animationID = null;
+
+      if (carouselContainer) {
+        carouselContainer.addEventListener('touchstart', handleTouchStart, { passive: false });
+        carouselContainer.addEventListener('touchmove', handleTouchMove, { passive: false });
+        carouselContainer.addEventListener('touchend', handleTouchEnd, { passive: true });
+      }
+
+      function handleTouchStart(e) {
+        if (window.innerWidth > 767) return; // Only on mobile
+
+        touchStartX = e.touches[0].clientX;
+        isDragging = true;
+
+        // Disable transitions during drag
+        tiles.forEach(tile => {
+          tile.style.transition = 'none';
+        });
+      }
+
+      function handleTouchMove(e) {
+        if (!isDragging || window.innerWidth > 767) return;
+
+        const currentX = e.touches[0].clientX;
+        const diff = currentX - touchStartX;
+
+        // Apply transform to visible tiles for drag feedback
+        const visibleTiles = Array.from(tiles).filter((_, idx) => {
+          return idx !== 0 && idx !== 4; // Show only middle 3 tiles on mobile
+        });
+
+        visibleTiles.forEach(tile => {
+          tile.style.transform = `translateX(${diff}px)`;
+        });
+      }
+
+      function handleTouchEnd(e) {
+        if (!isDragging || window.innerWidth > 767) return;
+
+        touchEndX = e.changedTouches[0].clientX;
+        isDragging = false;
+
+        const diff = touchStartX - touchEndX;
+        const swipeThreshold = 50;
+
+        // Re-enable transitions
+        tiles.forEach(tile => {
+          tile.style.transition = '';
+          tile.style.transform = '';
+        });
+
+        if (Math.abs(diff) > swipeThreshold) {
+          if (diff > 0) {
+            // Swipe left (finger moves left) - tiles slide left, right tile becomes center (next)
+            slideLeft();
+          } else {
+            // Swipe right (finger moves right) - tiles slide right, left tile becomes center (previous)
+            slideRight();
+          }
+        }
+      }
+
+      function slideLeft() {
+        // Check if we can slide left (is there a tile on the right?)
+        if (currentCenterDataIndex >= carouselData.length - 1) {
+          return; // Already at last image, can't go further
+        }
+
+        // Tiles slide left: right tile → center, center → left, left → hidden
+        currentCenterDataIndex++;
+
+        // Update visual positions
+        tiles.forEach((tile, index) => {
+          const currentPos = tilePositions[index];
+          const newPos = currentPos - 1;
+          tilePositions[index] = newPos;
+
+          // Apply position-based styling
+          applyTilePosition(tile, newPos);
+        });
+
+        // Update active class
+        setTimeout(() => {
+          updateActiveByPosition();
+          updateDots();
+        }, 450);
+      }
+
+      function slideRight() {
+        // Check if we can slide right (is there a tile on the left?)
+        if (currentCenterDataIndex <= 0) {
+          return; // Already at first image, can't go further
+        }
+
+        // Tiles slide right: left tile → center, center → right, right → hidden
+        currentCenterDataIndex--;
+
+        // Update visual positions
+        tiles.forEach((tile, index) => {
+          const currentPos = tilePositions[index];
+          const newPos = currentPos + 1;
+          tilePositions[index] = newPos;
+
+          // Apply position-based styling
+          applyTilePosition(tile, newPos);
+        });
+
+        // Update active class
+        setTimeout(() => {
+          updateActiveByPosition();
+          updateDots();
+        }, 450);
+      }
+
+      function applyTilePosition(tile, position) {
+        // Remove all position classes
+        tile.classList.remove('active', 'tile-hidden-left', 'tile-hidden-right', 'tile-side-left', 'tile-side-right');
+        tile.classList.remove('transitioning-to-active', 'transitioning-to-side', 'transitioning-to-hidden');
+
+        // Set order immediately (no transition needed for flex order)
+        tile.style.order = position;
+
+        // On mobile, only show positions 1, 2, 3 (left side, center, right side)
+        if (window.innerWidth <= 767) {
+          // Apply the target class - CSS transitions will animate width/opacity changes
+          if (position === 0 || position < 0) {
+            tile.classList.add('tile-hidden-left');
+          } else if (position === 1) {
+            tile.classList.add('tile-side-left');
+          } else if (position === 2) {
+            tile.classList.add('active');
+          } else if (position === 3) {
+            tile.classList.add('tile-side-right');
+          } else {
+            tile.classList.add('tile-hidden-right');
+          }
+        } else {
+          // Desktop: show all tiles
+          if (position === 2) {
+            tile.classList.add('active');
+          }
+        }
+      }
+
+      function updateActiveByPosition() {
+        tiles.forEach(tile => {
+          tile.classList.remove('active');
+        });
+
+        // Find tile at position 2 (center)
+        tiles.forEach((tile, index) => {
+          if (tilePositions[index] === 2) {
+            tile.classList.add('active');
+          }
+        });
+      }
+
+      // Initialize
+      initTiles();
+      initDots();
+      updateDots();
+
+      // Set initial positions for mobile
+      if (window.innerWidth <= 767) {
+        tiles.forEach((tile, index) => {
+          applyTilePosition(tile, tilePositions[index]);
+        });
+      }
+    }
+
     </script>
 
 </body>
