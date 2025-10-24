@@ -5204,7 +5204,8 @@ document.addEventListener("DOMContentLoaded", () => {
         touchStartX = e.touches[0].clientX;
         isDragging = true;
 
-        // Disable transitions on tiles during drag
+        // Disable transitions on container and tiles during drag
+        carouselContainer.style.transition = 'none';
         tiles.forEach(tile => {
           tile.style.transition = 'none';
         });
@@ -5221,6 +5222,9 @@ document.addEventListener("DOMContentLoaded", () => {
         const progress = Math.min(Math.abs(currentTranslate) / dragThreshold, 1);
         const direction = currentTranslate > 0 ? 'right' : 'left';
 
+        // Apply transform to entire container for unified movement
+        carouselContainer.style.transform = `translateX(${currentTranslate}px)`;
+
         // Animate width changes during drag
         const screenWidth = window.innerWidth;
         const sideWidth = screenWidth <= 599 ? 60 : 70;
@@ -5228,11 +5232,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         tiles.forEach((tile, index) => {
           const pos = tilePositions[index];
-
-          // Apply horizontal transform to all visible tiles
-          if (pos >= 1 && pos <= 3) {
-            tile.style.transform = `translateX(${currentTranslate}px)`;
-          }
 
           if (direction === 'left') {
             // Swiping left: right tile grows, center shrinks
@@ -5269,10 +5268,13 @@ document.addEventListener("DOMContentLoaded", () => {
         const diff = touchStartX - touchEndX;
         const swipeThreshold = 50;
 
-        // Re-enable tile transitions and reset inline styles
+        // Reset container transform and re-enable transitions
+        carouselContainer.style.transform = '';
+        carouselContainer.style.transition = '';
+
+        // Re-enable tile transitions
         tiles.forEach(tile => {
           tile.style.transition = '';
-          tile.style.transform = ''; // Reset transform
           tile.style.width = ''; // Reset to CSS class widths
           tile.style.opacity = '';
         });
