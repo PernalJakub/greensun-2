@@ -2768,8 +2768,8 @@
     .carousel-container::before,
     .carousel-container::after {
       content: '';
-      flex: 0 0 calc(50vw - 152px);
-      min-width: calc(50vw - 152px);
+      flex: 0 0 calc(50vw - 152px - 1rem);
+      min-width: calc(50vw - 152px - 1rem);
     }
 
     .carousel-container::-webkit-scrollbar {
@@ -2858,7 +2858,7 @@
 
     @media (max-width: 599px) {
       .carousel-tile{
-        margin: 0 0.4rem;
+        padding: 0 0.4rem;
       }
     }
   }

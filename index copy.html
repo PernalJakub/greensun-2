@@ -2587,7 +2587,7 @@
 
   .gallery-header {
     text-align: center;
-    margin-bottom: var(--space-5xl);
+    margin-bottom: var(--space-2xl);
   }
 
   .gallery-header h2 {
@@ -2623,14 +2623,15 @@
     position: relative;
     overflow: hidden;
     cursor: pointer;
-    transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1),
-                opacity 0.6s ease,
-                box-shadow 0.6s ease,
-                transform 0.3s ease;
+    transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.5s ease,
+                box-shadow 0.5s ease,
+                transform 0.2s ease;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     width: 120px;
     opacity: 0.6;
     flex-shrink: 0;
+    will-change: width, opacity;
   }
 
   .carousel-tile::before {
@@ -2639,7 +2640,7 @@
     inset: 0;
     background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 5%, rgba(0, 0, 0, 0.5) 15%, transparent 100%);
     opacity: 0;
-    transition: opacity 0.6s ease;
+    transition: opacity 0.5s ease;
     z-index: 1;
   }
 
@@ -2685,7 +2686,7 @@
     z-index: 2;
     opacity: 0;
     transform: translateY(10px);
-    transition: opacity 0.6s ease, transform 0.6s ease;
+    transition: opacity 0.5s ease, transform 0.5s ease;
   }
 
   .carousel-tile.active .carousel-tile-caption {
@@ -2694,8 +2695,8 @@
   }
 
   .carousel-tile-title {
-    font-size: 1.5rem;
-    font-weight: 700;
+    font-size: var(--headline-small);
+    font-weight: 500;
     margin-bottom: 0.25rem;
     color: var(--neutral-white);
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
@@ -2705,7 +2706,7 @@
   }
 
   .carousel-tile-subtitle {
-    font-size: 1rem;
+    font-size: var(--body-large);
     opacity: 0.95;
     color: var(--neutral-light);
     white-space: nowrap;
@@ -2744,85 +2745,121 @@
     opacity: 0.7;
   }
 
-  /* Mobile Responsive */
-  @media (max-width: 1023px) {
-    .carousel-tile {
-      width: 80px;
-      height: 300px;
-      border-radius: 24px;
-    }
-
-    .carousel-tile.active {
-      width: 450px;
-    }
-
-    .carousel-tile-title {
-      font-size: 1.25rem;
-    }
-
-    .carousel-tile-subtitle {
-      font-size: 0.875rem;
+  @media (max-width: 1024px) {
+    .gallery-section {
+      padding-left: 0;
+      padding-right: 0;
+      overflow: visible;
     }
 
     .carousel-container {
-      gap: 0.75rem;
-    }
-  }
-
-  @media (max-width: 767px) {
-    .carousel-container {
-      gap: 0.5rem;
-      overflow: hidden;
-    }
-
-    .carousel-tile {
-      width: 70px;
-      height: 450px;
-      border-radius: 24px;
+      display: flex;
+      gap: 1rem;
+      overflow-x: auto;
+      overflow-y: visible;
+      scroll-snap-type: x mandatory;
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
+      padding: 1.5rem 0;
+      margin: 0;
     }
 
-    .carousel-tile.active {
-      width: calc(100vw - 156px);
-      max-width: 450px;
-      height: 450px;
+    /* Create centering effect with pseudo-elements instead of padding */
+    .carousel-container::before,
+    .carousel-container::after {
+      content: '';
+      flex: 0 0 calc(50vw - 152px);
+      min-width: calc(50vw - 152px);
     }
 
-    .carousel-tile:nth-child(1),
-    .carousel-tile:nth-child(5) {
+    .carousel-container::-webkit-scrollbar {
       display: none;
     }
 
-    .carousel-tile-caption {
-      padding: 1rem 1.5rem;
+    .carousel-tile {
+      flex: 0 0 304px;
+      min-width: 304px;
+      max-width: 304px;
+      width: 304px;
+      scroll-snap-align: center;
+      scroll-snap-stop: always;
+      opacity: 0.6;
+      transform: scale(1);
+      transition: opacity 0.3s ease,
+                  transform 0.3s ease;
     }
 
-    .carousel-tile-title {
-      font-size: 1.125rem;
+    .carousel-tile.active {
+      opacity: 1;
+      transform: scale(1);
+      transition: opacity 0.3s ease,
+                  transform 0.3s ease;
     }
 
-    .carousel-tile-subtitle {
-      font-size: 0.875rem;
+    .carousel-nav {
+      display: none;
     }
   }
 
   @media (max-width: 599px) {
     .gallery-section {
-      padding: var(--space-5xl) var(--space-md);
+      padding: var(--space-5xl) 0;
+    }
+
+    .gallery-header h2 {
+      padding: 0 var(--space-md);
+    }
+    .gallery-header p {
+      padding: 0 var(--space-md);
     }
 
     .carousel-container {
-      gap: 0.4rem;
+      gap: 0rem;
     }
 
     .carousel-tile {
-      width: 60px;
       height: 400px;
+      transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                  opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                  box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                  margin 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      will-change: width;
+    }
+
+    .carousel-tile.tile-hidden-left,
+    .carousel-tile.tile-hidden-right {
+      width: 304px;
+      opacity: 0;
+    }
+
+    .carousel-tile.tile-side-left,
+    .carousel-tile.tile-side-right {
+      width: 304px;
     }
 
     .carousel-tile.active {
       width: calc(100vw - 136px);
-      max-width: 400px;
+      max-width: 304px;
       height: 400px;
+    }
+
+    .carousel-tile.transitioning-to-active {
+      width: calc(100vw - 136px);
+      max-width: 304px;
+    }
+
+    .carousel-tile.transitioning-to-side {
+      width: 304px;
+    }
+
+    .carousel-tile-caption {
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+
+    @media (max-width: 599px) {
+      .carousel-tile{
+        margin: 0 0.4rem;
+      }
     }
   }
 
@@ -4945,13 +4982,12 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       ];
 
-      let currentActiveIndex = 2; // Start with middle tile active (index 2 out of 0-4)
-      let touchStartX = 0;
-      let touchEndX = 0;
+      let currentActiveIndex = 2; // Desktop: Start with middle tile active (index 2 out of 0-4)
 
       const tiles = document.querySelectorAll('.carousel-tile');
       const dotsContainer = document.querySelector('.carousel-dots');
       const carouselContainer = document.querySelector('.carousel-container');
+      const isMobile = window.innerWidth <= 1024;
 
       // Initialize tiles with images and captions
       function initTiles() {
@@ -5028,10 +5064,42 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // Update dots based on active tile's data index
       function updateDots() {
-        const activeDataIndex = parseInt(tiles[currentActiveIndex].dataset.dataIndex);
-        document.querySelectorAll('.carousel-dot').forEach((dot, index) => {
-          dot.classList.toggle('active', index === activeDataIndex);
-        });
+        if (isMobile) {
+          // Mobile: Find which data is currently centered
+          const containerRect = carouselContainer.getBoundingClientRect();
+          const centerX = containerRect.left + containerRect.width / 2;
+
+          let closestTile = tiles[0];
+          let closestDistance = Infinity;
+
+          tiles.forEach(tile => {
+            const tileRect = tile.getBoundingClientRect();
+            const tileCenterX = tileRect.left + tileRect.width / 2;
+            const distance = Math.abs(tileCenterX - centerX);
+
+            if (distance < closestDistance) {
+              closestDistance = distance;
+              closestTile = tile;
+            }
+          });
+
+          // Update active class on tiles
+          tiles.forEach(tile => {
+            tile.classList.toggle('active', tile === closestTile);
+          });
+
+          // Update dots
+          const activeDataIndex = parseInt(closestTile.dataset.dataIndex);
+          document.querySelectorAll('.carousel-dot').forEach((dot, index) => {
+            dot.classList.toggle('active', index === activeDataIndex);
+          });
+        } else {
+          // Desktop: Use currentActiveIndex
+          const activeDataIndex = parseInt(tiles[currentActiveIndex].dataset.dataIndex);
+          document.querySelectorAll('.carousel-dot').forEach((dot, index) => {
+            dot.classList.toggle('active', index === activeDataIndex);
+          });
+        }
       }
 
       // Navigate next
@@ -5104,37 +5172,43 @@ document.addEventListener("DOMContentLoaded", () => {
         updateDots();
       }
 
-      // Keyboard navigation
-      document.addEventListener('keydown', (e) => {
-        if (e.key === 'ArrowLeft') prevSlide();
-        if (e.key === 'ArrowRight') nextSlide();
-      });
-
-      // Touch/swipe support
-      if (carouselContainer) {
-        carouselContainer.addEventListener('touchstart', (e) => {
-          touchStartX = e.changedTouches[0].screenX;
-        }, { passive: true });
-
-        carouselContainer.addEventListener('touchend', (e) => {
-          touchEndX = e.changedTouches[0].screenX;
-          handleSwipe();
-        }, { passive: true });
+      // Desktop only: Keyboard navigation
+      if (!isMobile) {
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'ArrowLeft') prevSlide();
+          if (e.key === 'ArrowRight') nextSlide();
+        });
       }
 
-      function handleSwipe() {
-        const swipeThreshold = 30;
-        const diff = touchStartX - touchEndX;
+      // Mobile: Simple horizontal scroll with auto-centering
+      if (isMobile && carouselContainer) {
+        let scrollTimeout;
 
-        if (Math.abs(diff) > swipeThreshold) {
-          if (diff > 0) {
-            // Swipe left - go to next (shift tiles left visually)
-            nextSlide();
-          } else {
-            // Swipe right - go to previous (shift tiles right visually)
-            prevSlide();
-          }
-        }
+        // Update dots when scrolling stops
+        carouselContainer.addEventListener('scroll', () => {
+          clearTimeout(scrollTimeout);
+          scrollTimeout = setTimeout(() => {
+            updateDots();
+          }, 0);
+        }, { passive: true });
+
+        // Center first tile when user scrolls to gallery (not on page load)
+        let hasInitialized = false;
+        const initObserver = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting && !hasInitialized) {
+              hasInitialized = true;
+              // Calculate scroll position within carousel container only
+              const tileWidth = 304;
+              const gap = 16; // 1rem
+              const centerOffset = (carouselContainer.offsetWidth / 2) - (tileWidth / 2);
+              carouselContainer.scrollLeft = Math.max(0, -centerOffset + (carouselContainer.offsetWidth / 2) - (tileWidth / 2));
+              setTimeout(() => updateDots(), 50);
+            }
+          });
+        }, { threshold: 0.1 });
+
+        initObserver.observe(carouselContainer);
       }
 
       // Initialize
