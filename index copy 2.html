@@ -5211,28 +5211,17 @@ document.addEventListener("DOMContentLoaded", () => {
           }, 0);
         }, { passive: true });
 
-        // Center first tile when carousel becomes visible (not on page load)
-        let hasInitialized = false;
-        const initObserver = new IntersectionObserver((entries) => {
-          entries.forEach(entry => {
-            if (entry.isIntersecting && !hasInitialized && tiles[0]) {
-              hasInitialized = true;
-              // Scroll within carousel only - calculate position of first tile
-              const firstTile = tiles[0];
-              const containerWidth = carouselContainer.offsetWidth;
-              const tileWidth = 304;
-              const centerOffset = (containerWidth / 2) - (tileWidth / 2);
-
-              // Scroll to position first tile in center
-              const firstTileOffset = firstTile.offsetLeft;
-              carouselContainer.scrollLeft = firstTileOffset - centerOffset;
-
-              setTimeout(() => updateDots(), 50);
-            }
-          });
-        }, { threshold: 0.1, rootMargin: '0px' });
-
-        initObserver.observe(carouselContainer);
+        // Center first tile on load
+        setTimeout(() => {
+          if (tiles[0]) {
+            tiles[0].scrollIntoView({
+              behavior: 'auto',
+              block: 'nearest',
+              inline: 'center'
+            });
+            setTimeout(() => updateDots(), 50);
+          }
+        }, 100);
       }
 
       // Initialize
