@@ -5106,17 +5106,14 @@ document.addEventListener("DOMContentLoaded", () => {
       // Update dots based on active tile's data index
       function updateDots() {
         if (isMobile) {
-          // Mobile: Find which tile is currently centered
+          // Mobile: Find which data is currently centered
           const containerRect = carouselContainer.getBoundingClientRect();
           const centerX = containerRect.left + containerRect.width / 2;
 
-          let closestTile = null;
+          let closestTile = tiles[0];
           let closestDistance = Infinity;
 
           tiles.forEach(tile => {
-            // Skip if tile doesn't have a data-index (padding tiles don't have this)
-            if (!tile.dataset.dataIndex) return;
-
             const tileRect = tile.getBoundingClientRect();
             const tileCenterX = tileRect.left + tileRect.width / 2;
             const distance = Math.abs(tileCenterX - centerX);
@@ -5127,20 +5124,16 @@ document.addEventListener("DOMContentLoaded", () => {
             }
           });
 
-          if (!closestTile) return; // Safety check
-
           // Update active class on tiles
           tiles.forEach(tile => {
             tile.classList.toggle('active', tile === closestTile);
           });
 
-          // Update dots - remove all active first, then add to correct one
+          // Update dots
           const activeDataIndex = parseInt(closestTile.dataset.dataIndex);
-          const allDots = document.querySelectorAll('.carousel-dot');
-          allDots.forEach(dot => dot.classList.remove('active'));
-          if (allDots[activeDataIndex]) {
-            allDots[activeDataIndex].classList.add('active');
-          }
+          document.querySelectorAll('.carousel-dot').forEach((dot, index) => {
+            dot.classList.toggle('active', index === activeDataIndex);
+          });
         } else {
           // Desktop: Use currentActiveIndex
           const activeDataIndex = parseInt(tiles[currentActiveIndex].dataset.dataIndex);
@@ -5250,29 +5243,13 @@ document.addEventListener("DOMContentLoaded", () => {
           }
         }, 0);
 
-        // Update dots when scrolling - use multiple timeouts to catch the snap
-        let scrollTimeout1, scrollTimeout2;
-
+        // Update dots when scrolling stops
         carouselContainer.addEventListener('scroll', () => {
-          // Quick update
-          clearTimeout(scrollTimeout1);
-          scrollTimeout1 = setTimeout(() => {
+          clearTimeout(scrollTimeout);
+          scrollTimeout = setTimeout(() => {
             updateDots();
-          }, 50);
-
-          // Delayed update to catch snap completion
-          clearTimeout(scrollTimeout2);
-          scrollTimeout2 = setTimeout(() => {
-            updateDots();
-          }, 300);
+          }, 0);
         }, { passive: true });
-
-        // Also use scrollend if available (modern browsers)
-        if ('onscrollend' in window) {
-          carouselContainer.addEventListener('scrollend', () => {
-            updateDots();
-          }, { passive: true });
-        }
       }
 
       // Initialize
