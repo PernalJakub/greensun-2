@@ -5086,20 +5086,8 @@ document.addEventListener("DOMContentLoaded", () => {
           }
         });
 
-        if (targetTileIndex !== -1) {
-          if (isMobile) {
-            // Mobile: Scroll tile to center
-            tiles[targetTileIndex].scrollIntoView({
-              behavior: 'smooth',
-              block: 'nearest',
-              inline: 'center'
-            });
-          } else {
-            // Desktop: Use setActiveTile
-            if (targetTileIndex !== currentActiveIndex) {
-              setActiveTile(targetTileIndex);
-            }
-          }
+        if (targetTileIndex !== -1 && targetTileIndex !== currentActiveIndex) {
+          setActiveTile(targetTileIndex);
         }
       }
 
