@@ -2745,10 +2745,15 @@
     opacity: 0.7;
   }
 
+  /* Padding tiles - hidden on desktop, visible on mobile */
+  .carousel-padding-tile {
+    display: none;
+  }
+
   @media (max-width: 1024px) {
     .gallery-section {
-      padding-left: 0;
-      padding-right: 0;
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
       overflow: visible;
     }
 
@@ -2760,8 +2765,7 @@
       scroll-snap-type: x mandatory;
       scroll-behavior: smooth;
       -webkit-overflow-scrolling: touch;
-      padding: 1.5rem 0;
-      margin: 0;
+      padding: 1.5rem 1.5rem;
     }
 
     /* Create centering effect with pseudo-elements instead of padding */
@@ -2794,6 +2798,17 @@
       transform: scale(1);
       transition: opacity 0.3s ease,
                   transform 0.3s ease;
+    }
+
+    .carousel-padding-tile {
+      display: block;
+      flex: 0 0 20px;
+      min-width: 20px;
+      max-width: 20px;
+      width: 20px;
+      height: 400px;
+      opacity: 0;
+      pointer-events: none;
     }
 
     .carousel-nav {
@@ -2857,7 +2872,7 @@
     }
 
     @media (max-width: 599px) {
-      .carousel-tile{
+      .carousel-tile {
         margin: 0 0.4rem;
       }
     }
@@ -3988,12 +4003,16 @@
 
       <!-- Carousel Container -->
       <div class="carousel-container">
+        <!-- Padding tile left -->
+        <div class="carousel-padding-tile"></div>
         <!-- Carousel Tiles -->
         <div class="carousel-tile" data-position="0"></div>
         <div class="carousel-tile" data-position="1"></div>
         <div class="carousel-tile active" data-position="2"></div>
         <div class="carousel-tile" data-position="3"></div>
         <div class="carousel-tile" data-position="4"></div>
+        <!-- Padding tile right -->
+        <div class="carousel-padding-tile"></div>
       </div>
 
       <!-- Dots Navigation -->
@@ -5013,7 +5032,17 @@ document.addEventListener("DOMContentLoaded", () => {
           // Click handler
           tile.addEventListener('click', () => {
             if (!tile.classList.contains('active')) {
-              setActiveTile(index);
+              if (isMobile) {
+                // Mobile: Scroll tile to center
+                tile.scrollIntoView({
+                  behavior: 'smooth',
+                  block: 'nearest',
+                  inline: 'center'
+                });
+              } else {
+                // Desktop: Use setActiveTile
+                setActiveTile(index);
+              }
             }
           });
         });
@@ -5192,21 +5221,26 @@ document.addEventListener("DOMContentLoaded", () => {
           }, 0);
         }, { passive: true });
 
-        // Center first tile when user scrolls to gallery (not on page load)
+        // Center first tile when carousel becomes visible (not on page load)
         let hasInitialized = false;
         const initObserver = new IntersectionObserver((entries) => {
           entries.forEach(entry => {
-            if (entry.isIntersecting && !hasInitialized) {
+            if (entry.isIntersecting && !hasInitialized && tiles[0]) {
               hasInitialized = true;
-              // Calculate scroll position within carousel container only
+              // Scroll within carousel only - calculate position of first tile
+              const firstTile = tiles[0];
+              const containerWidth = carouselContainer.offsetWidth;
               const tileWidth = 304;
-              const gap = 16; // 1rem
-              const centerOffset = (carouselContainer.offsetWidth / 2) - (tileWidth / 2);
-              carouselContainer.scrollLeft = Math.max(0, -centerOffset + (carouselContainer.offsetWidth / 2) - (tileWidth / 2));
+              const centerOffset = (containerWidth / 2) - (tileWidth / 2);
+
+              // Scroll to position first tile in center
+              const firstTileOffset = firstTile.offsetLeft;
+              carouselContainer.scrollLeft = firstTileOffset - centerOffset;
+
               setTimeout(() => updateDots(), 50);
             }
           });
-        }, { threshold: 0.1 });
+        }, { threshold: 0.1, rootMargin: '0px' });
 
         initObserver.observe(carouselContainer);
       }
