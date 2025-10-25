@@ -2768,8 +2768,8 @@
     .carousel-container::before,
     .carousel-container::after {
       content: '';
-      flex: 0 0 calc(50vw - 152px - 1rem);
-      min-width: calc(50vw - 152px - 1rem);
+      flex: 0 0 calc(50vw - 152px - 2rem);
+      min-width: calc(50vw - 152px - 2rem);
     }
 
     .carousel-container::-webkit-scrollbar {
@@ -2857,8 +2857,8 @@
     }
 
     @media (max-width: 599px) {
-      .carousel-tile{
-        padding: 0 0.4rem;
+      .carousel-tile {
+        margin: 0 0.4rem;
       }
     }
   }
@@ -5192,23 +5192,17 @@ document.addEventListener("DOMContentLoaded", () => {
           }, 0);
         }, { passive: true });
 
-        // Center first tile when user scrolls to gallery (not on page load)
-        let hasInitialized = false;
-        const initObserver = new IntersectionObserver((entries) => {
-          entries.forEach(entry => {
-            if (entry.isIntersecting && !hasInitialized) {
-              hasInitialized = true;
-              // Calculate scroll position within carousel container only
-              const tileWidth = 304;
-              const gap = 16; // 1rem
-              const centerOffset = (carouselContainer.offsetWidth / 2) - (tileWidth / 2);
-              carouselContainer.scrollLeft = Math.max(0, -centerOffset + (carouselContainer.offsetWidth / 2) - (tileWidth / 2));
-              setTimeout(() => updateDots(), 50);
-            }
-          });
-        }, { threshold: 0.1 });
-
-        initObserver.observe(carouselContainer);
+        // Center first tile on load
+        setTimeout(() => {
+          if (tiles[0]) {
+            tiles[0].scrollIntoView({
+              behavior: 'auto',
+              block: 'nearest',
+              inline: 'center'
+            });
+            setTimeout(() => updateDots(), 50);
+          }
+        }, 100);
       }
 
       // Initialize
