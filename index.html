@@ -2745,6 +2745,11 @@
     opacity: 0.7;
   }
 
+  /* Padding tiles - hidden on desktop, visible on mobile */
+  .carousel-padding-tile {
+    display: none;
+  }
+
   @media (max-width: 1024px) {
     .gallery-section {
       padding-left: 1.5rem;
@@ -2794,6 +2799,17 @@
       transform: scale(1);
       transition: opacity 0.3s ease,
                   transform 0.3s ease;
+    }
+
+    .carousel-padding-tile {
+      display: block;
+      flex: 0 0 20px;
+      min-width: 20px;
+      max-width: 20px;
+      width: 20px;
+      height: 400px;
+      opacity: 0;
+      pointer-events: none;
     }
 
     .carousel-nav {
@@ -3988,12 +4004,16 @@
 
       <!-- Carousel Container -->
       <div class="carousel-container">
+        <!-- Padding tile left -->
+        <div class="carousel-padding-tile"></div>
         <!-- Carousel Tiles -->
         <div class="carousel-tile" data-position="0"></div>
         <div class="carousel-tile" data-position="1"></div>
         <div class="carousel-tile active" data-position="2"></div>
         <div class="carousel-tile" data-position="3"></div>
         <div class="carousel-tile" data-position="4"></div>
+        <!-- Padding tile right -->
+        <div class="carousel-padding-tile"></div>
       </div>
 
       <!-- Dots Navigation -->
