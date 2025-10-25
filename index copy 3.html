@@ -2746,7 +2746,7 @@
   }
 
   /* Mobile Responsive */
-  /* @media (max-width: 1023px) {
+  @media (max-width: 1023px) {
     .carousel-tile {
       width: 80px;
       height: 300px;
@@ -2768,52 +2768,91 @@
     .carousel-container {
       gap: 0.75rem;
     }
-  } */
+  }
 
-  @media (max-width: 1024px) {
+  @media (max-width: 767px) {
     .carousel-container {
-      display: flex;
       gap: 0.5rem;
-      overflow-x: auto;
-      overflow-y: visible;
-      scroll-snap-type: x mandatory;
-      scroll-behavior: smooth;
-      -webkit-overflow-scrolling: touch;
-      padding: 1.5rem 0;
-    }
-
-    /* Create centering effect with pseudo-elements instead of padding */
-    .carousel-container::before,
-    .carousel-container::after {
-      content: '';
-      flex: 0 0 calc(50vw - 152px);
-      min-width: calc(50vw - 152px);
-    }
-
-    .carousel-container::-webkit-scrollbar {
-      display: none;
+      overflow: hidden;
+      touch-action: pan-y;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .carousel-tile {
-      flex: 0 0 304px;
-      min-width: 304px;
-      max-width: 304px;
-      width: 304px;
-      scroll-snap-align: center;
-      scroll-snap-stop: always;
-      opacity: 0.5;
-      transform: scale(0.98);
-      transition: opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1),
-                  transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      height: 450px;
+      border-radius: 24px;
+      transition: width 0.45s cubic-bezier(0.4, 0, 0.2, 1),
+                  opacity 0.45s cubic-bezier(0.4, 0, 0.2, 1),
+                  box-shadow 0.45s cubic-bezier(0.4, 0, 0.2, 1),
+                  margin 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+      flex-shrink: 0;
+      will-change: width;
+    }
+
+    /* Position-based classes */
+    .carousel-tile.tile-hidden-left {
+      width: 0;
+      opacity: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .carousel-tile.tile-hidden-right {
+      width: 0;
+      opacity: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .carousel-tile.tile-side-left {
+      width: 70px;
+      opacity: 0.6;
+    }
+
+    .carousel-tile.tile-side-right {
+      width: 70px;
+      opacity: 0.6;
     }
 
     .carousel-tile.active {
+      width: calc(100vw - 156px);
+      max-width: 450px;
+      height: 450px;
       opacity: 1;
-      transform: scale(1);
     }
 
-    .carousel-nav {
-      display: none;
+    /* Transitioning states for smooth gap maintenance */
+    .carousel-tile.transitioning-to-active {
+      width: calc(100vw - 156px);
+      max-width: 450px;
+      opacity: 1;
+    }
+
+    .carousel-tile.transitioning-to-side {
+      width: 70px;
+      opacity: 0.6;
+    }
+
+    .carousel-tile.transitioning-to-hidden {
+      width: 0;
+      opacity: 0;
+      margin: 0;
+    }
+
+    .carousel-tile-caption {
+      padding: 1rem 1.5rem;
+      transition: opacity 0.45s ease, transform 0.45s ease;
+    }
+
+    .carousel-tile-title {
+      font-size: 1.125rem;
+    }
+
+    .carousel-tile-subtitle {
+      font-size: 0.875rem;
     }
   }
 
@@ -2837,28 +2876,28 @@
 
     .carousel-tile.tile-hidden-left,
     .carousel-tile.tile-hidden-right {
-      width: 304px;
+      width: 60px;
       opacity: 0;
     }
 
     .carousel-tile.tile-side-left,
     .carousel-tile.tile-side-right {
-      width: 304px;
+      width: 60px;
     }
 
     .carousel-tile.active {
       width: calc(100vw - 136px);
-      max-width: 304px;
+      max-width: 400px;
       height: 400px;
     }
 
     .carousel-tile.transitioning-to-active {
       width: calc(100vw - 136px);
-      max-width: 304px;
+      max-width: 400px;
     }
 
     .carousel-tile.transitioning-to-side {
-      width: 304px;
+      width: 60px;
     }
 
     .carousel-tile-caption {
@@ -4985,12 +5024,17 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       ];
 
-      let currentActiveIndex = 2; // Desktop: Start with middle tile active (index 2 out of 0-4)
+      let currentActiveIndex = 2; // Start with middle tile active (index 2 out of 0-4)
+      let currentCenterDataIndex = 2; // Which data index is currently in center
+      let touchStartX = 0;
+      let touchEndX = 0;
 
       const tiles = document.querySelectorAll('.carousel-tile');
       const dotsContainer = document.querySelector('.carousel-dots');
       const carouselContainer = document.querySelector('.carousel-container');
-      const isMobile = window.innerWidth <= 1024;
+
+      // Track tile positions for mobile
+      let tilePositions = [0, 1, 2, 3, 4]; // Physical positions of tiles
 
       // Initialize tiles with images and captions
       function initTiles() {
@@ -5067,42 +5111,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // Update dots based on active tile's data index
       function updateDots() {
-        if (isMobile) {
-          // Mobile: Find which data is currently centered
-          const containerRect = carouselContainer.getBoundingClientRect();
-          const centerX = containerRect.left + containerRect.width / 2;
-
-          let closestTile = tiles[0];
-          let closestDistance = Infinity;
-
-          tiles.forEach(tile => {
-            const tileRect = tile.getBoundingClientRect();
-            const tileCenterX = tileRect.left + tileRect.width / 2;
-            const distance = Math.abs(tileCenterX - centerX);
-
-            if (distance < closestDistance) {
-              closestDistance = distance;
-              closestTile = tile;
-            }
-          });
-
-          // Update active class on tiles
-          tiles.forEach(tile => {
-            tile.classList.toggle('active', tile === closestTile);
-          });
-
-          // Update dots
-          const activeDataIndex = parseInt(closestTile.dataset.dataIndex);
-          document.querySelectorAll('.carousel-dot').forEach((dot, index) => {
-            dot.classList.toggle('active', index === activeDataIndex);
-          });
-        } else {
-          // Desktop: Use currentActiveIndex
-          const activeDataIndex = parseInt(tiles[currentActiveIndex].dataset.dataIndex);
-          document.querySelectorAll('.carousel-dot').forEach((dot, index) => {
-            dot.classList.toggle('active', index === activeDataIndex);
-          });
-        }
+        const activeDataIndex = parseInt(tiles[currentActiveIndex].dataset.dataIndex);
+        document.querySelectorAll('.carousel-dot').forEach((dot, index) => {
+          dot.classList.toggle('active', index === activeDataIndex);
+        });
       }
 
       // Navigate next
@@ -5175,44 +5187,343 @@ document.addEventListener("DOMContentLoaded", () => {
         updateDots();
       }
 
-      // Desktop only: Keyboard navigation
-      if (!isMobile) {
-        document.addEventListener('keydown', (e) => {
-          if (e.key === 'ArrowLeft') prevSlide();
-          if (e.key === 'ArrowRight') nextSlide();
+      // Keyboard navigation
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowLeft') prevSlide();
+        if (e.key === 'ArrowRight') nextSlide();
+      });
+
+      // Touch/swipe support with visual sliding
+      let isDragging = false;
+      let currentTranslate = 0;
+      let prevTranslate = 0;
+      let animationID = null;
+      let isAutoCommitting = false;
+      const autoCommitThreshold = 60; // Auto-commit after 60px drag
+
+      if (carouselContainer) {
+        carouselContainer.addEventListener('touchstart', handleTouchStart, { passive: false });
+        carouselContainer.addEventListener('touchmove', handleTouchMove, { passive: false });
+        carouselContainer.addEventListener('touchend', handleTouchEnd, { passive: true });
+      }
+
+      function handleTouchStart(e) {
+        if (window.innerWidth > 767 || isAutoCommitting) return; // Only on mobile, block if auto-committing
+
+        touchStartX = e.touches[0].clientX;
+        isDragging = true;
+
+        // Disable transitions on tiles during drag
+        tiles.forEach(tile => {
+          tile.style.transition = 'none';
         });
       }
 
-      // Mobile: Simple horizontal scroll with auto-centering
-      if (isMobile && carouselContainer) {
-        let scrollTimeout;
+      function handleTouchMove(e) {
+        if (!isDragging || window.innerWidth > 767 || isAutoCommitting) return;
 
-        // Update dots when scrolling stops
-        carouselContainer.addEventListener('scroll', () => {
-          clearTimeout(scrollTimeout);
-          scrollTimeout = setTimeout(() => {
-            updateDots();
-          }, 150);
-        }, { passive: true });
+        const currentX = e.touches[0].clientX;
+        currentTranslate = currentX - touchStartX;
 
-        // Center first tile on load (so users can scroll both left and right)
-        setTimeout(() => {
-          if (tiles[0]) {
-            tiles[0].scrollIntoView({
-              behavior: 'auto',
-              block: 'nearest',
-              inline: 'center'
-            });
-            // Trigger initial update after scrolling
-            setTimeout(() => updateDots(), 50);
+        // Check for auto-commit threshold
+        if (Math.abs(currentTranslate) >= autoCommitThreshold) {
+          triggerAutoCommit(currentTranslate > 0 ? 'right' : 'left');
+          return;
+        }
+
+        // Calculate drag progress (0 to 1)
+        const dragThreshold = 200; // Max drag distance for full transition
+        const progress = Math.min(Math.abs(currentTranslate) / dragThreshold, 1);
+        const direction = currentTranslate > 0 ? 'right' : 'left';
+
+        // Animate width changes during drag
+        const screenWidth = window.innerWidth;
+        const sideWidth = screenWidth <= 599 ? 60 : 70;
+        const mainMaxWidth = screenWidth <= 599 ? Math.min(screenWidth - 136, 400) : Math.min(screenWidth - 156, 450);
+
+        // Apply transform to container to move all tiles together
+        carouselContainer.style.transform = `translateX(${currentTranslate}px)`;
+
+        tiles.forEach((tile, index) => {
+          const pos = tilePositions[index];
+
+          if (direction === 'left') {
+            // Swiping left: right tile grows, center shrinks
+            if (pos === 2) { // Center tile
+              const newWidth = mainMaxWidth - (mainMaxWidth - sideWidth) * progress;
+              tile.style.width = `${newWidth}px`;
+              tile.style.opacity = 1 - (0.4 * progress);
+            } else if (pos === 3) { // Right tile
+              const newWidth = sideWidth + (mainMaxWidth - sideWidth) * progress;
+              tile.style.width = `${newWidth}px`;
+              tile.style.opacity = 0.6 + (0.4 * progress);
+            } else if (pos === 4) { // Hidden tile on far right - expand from 0 during drag
+              const newWidth = sideWidth * progress;
+              tile.style.width = `${newWidth}px`;
+              tile.style.opacity = 0.6 * progress; // Fade in
+            } else if (pos === 1) { // Left side tile
+              tile.style.width = `${sideWidth}px`;
+              tile.style.opacity = Math.max(0.6 - (0.3 * progress), 0.3);
+            } else if (pos === 0) { // Hidden left tile - shrink to 0
+              const newWidth = sideWidth * (1 - progress);
+              tile.style.width = `${newWidth}px`;
+              tile.style.opacity = 0.6 * (1 - progress);
+            }
+          } else {
+            // Swiping right: left tile grows, center shrinks
+            if (pos === 2) { // Center tile
+              const newWidth = mainMaxWidth - (mainMaxWidth - sideWidth) * progress;
+              tile.style.width = `${newWidth}px`;
+              tile.style.opacity = 1 - (0.4 * progress);
+            } else if (pos === 1) { // Left tile
+              const newWidth = sideWidth + (mainMaxWidth - sideWidth) * progress;
+              tile.style.width = `${newWidth}px`;
+              tile.style.opacity = 0.6 + (0.4 * progress);
+            } else if (pos === 0) { // Hidden tile on far left - expand from 0 during drag
+              const newWidth = sideWidth * progress;
+              tile.style.width = `${newWidth}px`;
+              tile.style.opacity = 0.6 * progress; // Fade in
+            } else if (pos === 3) { // Right side tile
+              tile.style.width = `${sideWidth}px`;
+              tile.style.opacity = Math.max(0.6 - (0.3 * progress), 0.3);
+            } else if (pos === 4) { // Hidden right tile - shrink to 0
+              const newWidth = sideWidth * (1 - progress);
+              tile.style.width = `${newWidth}px`;
+              tile.style.opacity = 0.6 * (1 - progress);
+            }
           }
-        }, 100);
+        });
+      }
+
+      function triggerAutoCommit(direction) {
+        // Lock interaction and set flags
+        isAutoCommitting = true;
+        isDragging = false;
+
+        // Reset container transform
+        carouselContainer.style.transform = '';
+
+        // Re-enable transitions for smooth auto-complete
+        tiles.forEach(tile => {
+          tile.style.transition = '';
+          tile.style.width = '';
+          tile.style.opacity = '';
+        });
+
+        // Trigger the slide
+        if (direction === 'left') {
+          slideLeft();
+        } else {
+          slideRight();
+        }
+
+        // Reset flags and translate values after animation completes
+        setTimeout(() => {
+          isAutoCommitting = false;
+          currentTranslate = 0;
+          prevTranslate = 0;
+        }, 450); // Match the CSS transition duration
+      }
+
+      function handleTouchEnd(e) {
+        if (!isDragging || window.innerWidth > 767) return;
+
+        touchEndX = e.changedTouches[0].clientX;
+        isDragging = false;
+
+        const diff = touchStartX - touchEndX;
+        const swipeThreshold = 50;
+
+        // Reset container transform
+        carouselContainer.style.transform = '';
+
+        // Re-enable tile transitions and reset inline styles
+        tiles.forEach(tile => {
+          tile.style.transition = '';
+          tile.style.width = ''; // Reset to CSS class widths
+          tile.style.opacity = '';
+        });
+
+        if (Math.abs(diff) > swipeThreshold) {
+          if (diff > 0) {
+            // Swipe left (finger moves left) - tiles slide left, right tile becomes center (next)
+            slideLeft();
+          } else {
+            // Swipe right (finger moves right) - tiles slide right, left tile becomes center (previous)
+            slideRight();
+          }
+        }
+
+        currentTranslate = 0;
+        prevTranslate = 0;
+      }
+
+      function slideLeft() {
+        // Check if we can slide left (is there a tile on the right?)
+        if (currentCenterDataIndex >= carouselData.length - 1) {
+          return; // Already at last image, can't go further
+        }
+
+        // Tiles slide left: right tile → center, center → left, left → hidden
+        currentCenterDataIndex++;
+
+        console.log('slideLeft: BEFORE positions:', [...tilePositions]);
+
+        // Update visual positions
+        tiles.forEach((tile, index) => {
+          const currentPos = tilePositions[index];
+          const newPos = currentPos - 1;
+          tilePositions[index] = newPos;
+
+          console.log(`Tile ${index}: pos ${currentPos} → ${newPos}, order: ${tile.style.order}`);
+
+          // Apply position-based styling
+          applyTilePosition(tile, newPos);
+        });
+
+        // Rotate tile DATA: when a tile moves to position -1 (off left), reload it with new data at position 4 (far right)
+        const tileMovingOffLeft = tiles.findIndex((tile, index) => tilePositions[index] === -1);
+        if (tileMovingOffLeft !== -1) {
+          // This tile is now off screen on the left, move it to the right with new data
+          tilePositions[tileMovingOffLeft] = 4;
+
+          // Load new data (next image in sequence)
+          const newDataIndex = (currentCenterDataIndex + 2) % carouselData.length;
+          const newData = carouselData[newDataIndex];
+          tiles[tileMovingOffLeft].dataset.dataIndex = newDataIndex;
+          tiles[tileMovingOffLeft].style.backgroundImage = `url('${newData.src}')`;
+
+          const caption = tiles[tileMovingOffLeft].querySelector('.carousel-tile-caption');
+          if (caption) {
+            caption.innerHTML = `
+              <div class="carousel-tile-title">${newData.title}</div>
+              <div class="carousel-tile-subtitle">${newData.subtitle}</div>
+            `;
+          }
+
+          // Apply the position-4 styling
+          applyTilePosition(tiles[tileMovingOffLeft], 4);
+        }
+
+        console.log('slideLeft: AFTER positions:', [...tilePositions]);
+
+        // Update active class
+        setTimeout(() => {
+          updateActiveByPosition();
+          updateDots();
+        }, 450);
+      }
+
+      function slideRight() {
+        // Check if we can slide right (is there a tile on the left?)
+        if (currentCenterDataIndex <= 0) {
+          return; // Already at first image, can't go further
+        }
+
+        // Tiles slide right: left tile → center, center → right, right → hidden
+        currentCenterDataIndex--;
+
+        console.log('slideRight: BEFORE positions:', [...tilePositions]);
+
+        // Update visual positions
+        tiles.forEach((tile, index) => {
+          const currentPos = tilePositions[index];
+          const newPos = currentPos + 1;
+          tilePositions[index] = newPos;
+
+          console.log(`Tile ${index}: pos ${currentPos} → ${newPos}, order: ${tile.style.order}`);
+
+          // Apply position-based styling
+          applyTilePosition(tile, newPos);
+        });
+
+        // Rotate tile DATA: when a tile moves to position 5 (off right), reload it with new data at position 0 (far left)
+        const tileMovingOffRight = tiles.findIndex((tile, index) => tilePositions[index] === 5);
+        if (tileMovingOffRight !== -1) {
+          // This tile is now off screen on the right, move it to the left with new data
+          tilePositions[tileMovingOffRight] = 0;
+
+          // Load new data (previous image in sequence)
+          const newDataIndex = (currentCenterDataIndex - 2 + carouselData.length) % carouselData.length;
+          const newData = carouselData[newDataIndex];
+          tiles[tileMovingOffRight].dataset.dataIndex = newDataIndex;
+          tiles[tileMovingOffRight].style.backgroundImage = `url('${newData.src}')`;
+
+          const caption = tiles[tileMovingOffRight].querySelector('.carousel-tile-caption');
+          if (caption) {
+            caption.innerHTML = `
+              <div class="carousel-tile-title">${newData.title}</div>
+              <div class="carousel-tile-subtitle">${newData.subtitle}</div>
+            `;
+          }
+
+          // Apply the position-0 styling
+          applyTilePosition(tiles[tileMovingOffRight], 0);
+        }
+
+        console.log('slideRight: AFTER positions:', [...tilePositions]);
+
+        // Update active class
+        setTimeout(() => {
+          updateActiveByPosition();
+          updateDots();
+        }, 450);
+      }
+
+      function applyTilePosition(tile, position) {
+        // Remove all position classes
+        tile.classList.remove('active', 'tile-hidden-left', 'tile-hidden-right', 'tile-side-left', 'tile-side-right');
+        tile.classList.remove('transitioning-to-active', 'transitioning-to-side', 'transitioning-to-hidden');
+
+        // Set order immediately (no transition needed for flex order)
+        tile.style.order = position;
+
+        // On mobile, only show positions 1, 2, 3 (left side, center, right side)
+        if (window.innerWidth <= 767) {
+          // Apply the target class - CSS transitions will animate width/opacity changes
+          if (position === 0 || position < 0) {
+            tile.classList.add('tile-hidden-left');
+          } else if (position === 1) {
+            tile.classList.add('tile-side-left');
+          } else if (position === 2) {
+            tile.classList.add('active');
+          } else if (position === 3) {
+            tile.classList.add('tile-side-right');
+          } else {
+            tile.classList.add('tile-hidden-right');
+          }
+        } else {
+          // Desktop: show all tiles
+          if (position === 2) {
+            tile.classList.add('active');
+          }
+        }
+      }
+
+      function updateActiveByPosition() {
+        tiles.forEach(tile => {
+          tile.classList.remove('active');
+        });
+
+        // Find tile at position 2 (center)
+        tiles.forEach((tile, index) => {
+          if (tilePositions[index] === 2) {
+            tile.classList.add('active');
+          }
+        });
       }
 
       // Initialize
       initTiles();
       initDots();
       updateDots();
+
+      // Set initial positions for mobile
+      if (window.innerWidth <= 767) {
+        tiles.forEach((tile, index) => {
+          applyTilePosition(tile, tilePositions[index]);
+        });
+      }
     }
 
     </script>
