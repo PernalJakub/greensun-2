@@ -2810,8 +2810,8 @@
       scroll-snap-stop: always;
       opacity: 0.6;
       transform: scale(1);
-      transition: opacity 0.5s ease,
-                  transform 0.5s ease;
+      transition: opacity 0.15s ease,
+                  transform 0.15s ease;
     }
 
     .carousel-tile.active {
@@ -5201,7 +5201,7 @@ document.addEventListener("DOMContentLoaded", () => {
           clearTimeout(scrollTimeout);
           scrollTimeout = setTimeout(() => {
             updateDots();
-          }, 150);
+          }, 0);
         }, { passive: true });
 
         // Center first tile on load
