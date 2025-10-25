@@ -2695,8 +2695,8 @@
   }
 
   .carousel-tile-title {
-    font-size: 1.5rem;
-    font-weight: 700;
+    font-size: var(--headline-small);
+    font-weight: 500;
     margin-bottom: 0.25rem;
     color: var(--neutral-white);
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
@@ -2706,7 +2706,7 @@
   }
 
   .carousel-tile-subtitle {
-    font-size: 1rem;
+    font-size: var(--body-large);
     opacity: 0.95;
     color: var(--neutral-light);
     white-space: nowrap;
@@ -2811,6 +2811,10 @@
     }
     .gallery-header p {
       padding: 0 var(--space-md);
+    }
+
+    .carousel-container {
+      gap: 0rem;
     }
 
     .carousel-tile {
