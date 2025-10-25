@@ -2747,8 +2747,8 @@
 
   @media (max-width: 1024px) {
     .gallery-section {
-      padding-left: 0;
-      padding-right: 0;
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
       overflow: visible;
     }
 
@@ -2760,16 +2760,16 @@
       scroll-snap-type: x mandatory;
       scroll-behavior: smooth;
       -webkit-overflow-scrolling: touch;
-      padding: 1.5rem 1.5rem;
-      margin: 0;
+      padding: 1.5rem 0;
+      margin: 0 -1.5rem;
     }
 
     /* Create centering effect with pseudo-elements instead of padding */
     .carousel-container::before,
     .carousel-container::after {
       content: '';
-      flex: 0 0 calc(50vw - 152px - 1.5rem);
-      min-width: calc(50vw - 152px - 1.5rem);
+      flex: 0 0 calc(50vw - 152px);
+      min-width: calc(50vw - 152px);
     }
 
     .carousel-container::-webkit-scrollbar {
