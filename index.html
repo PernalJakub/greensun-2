@@ -1032,7 +1032,7 @@
     
     @media (max-width: 599px) {
       .navbar-section .navbar-logo {
-        width: 120px;
+        width: 130px;
       }
     }
     .navbar-section .navbar-company {
@@ -1690,6 +1690,7 @@
 
     .card-shadow-visible {
       box-shadow: 0px 6px 9px 0px rgba(0, 0, 0, 0.25);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
       background-color: #00000043;
     }
 
@@ -2258,14 +2259,15 @@
   .services-header h2 {
     font-size: var(--display-medium);
     color: var(--text-primary);
-    margin-bottom: var(--space-md);
+    margin-bottom: var(--space-lg);
+    line-height: var(--line-height-display-medium);
   }
 
   .services-header p {
     font-size: var(--body-large);
     color: var(--text-secondary);
-    max-width: 600px;
-    margin: 0 auto;
+    line-height: var(--line-height-body-large);
+    margin-bottom: var(--space-md);
   }
 
   .services-grid {
@@ -2593,12 +2595,15 @@
   .gallery-header h2 {
     font-size: var(--display-medium);
     color: var(--text-primary);
-    margin-bottom: var(--space-md);
+    margin-bottom: var(--space-lg);
+    line-height: var(--line-height-display-medium);
   }
 
   .gallery-header p {
     font-size: var(--body-large);
     color: var(--text-secondary);
+    line-height: var(--line-height-body-large);
+    margin-bottom: var(--space-md);
   }
 
   /* Carousel Container */
@@ -2608,7 +2613,7 @@
     align-items: center;
     justify-content: center;
     gap: 1rem;
-    padding: 2rem 0;
+    padding: 2.5rem 0;
     max-width: 1400px;
     margin: 0 auto;
   }
@@ -2720,7 +2725,7 @@
     display: flex;
     justify-content: center;
     gap: 0.75rem;
-    margin-top: 2rem;
+    /* margin-top: 2rem; */
   }
 
   .carousel-dot {
@@ -2750,6 +2755,43 @@
     display: none;
   }
 
+  /* Dark Mode - Gallery Section */
+  [data-theme="dark"] .gallery-section {
+    background: linear-gradient(135deg, #0f0f10 0%, #000000 100%);
+  }
+
+  [data-theme="dark"] .gallery-header h2 {
+    color: var(--text-primary);
+  }
+
+  [data-theme="dark"] .gallery-header p {
+    color: var(--text-secondary);
+  }
+
+  [data-theme="dark"] .carousel-tile-caption {
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.9), transparent);
+  }
+
+  [data-theme="dark"] .carousel-tile-title {
+    color: #ffffff;
+  }
+
+  [data-theme="dark"] .carousel-tile-subtitle {
+    color: #e5e5e6;
+  }
+
+  [data-theme="dark"] .carousel-dot {
+    background: #3e3e40;
+  }
+
+  [data-theme="dark"] .carousel-dot.active {
+    background: var(--primary-base);
+  }
+
+  [data-theme="dark"] .carousel-dot:hover {
+    background: var(--primary-base);
+  }
+
   @media (max-width: 1024px) {
     .gallery-section {
       padding-left: 1.5rem;
@@ -2765,7 +2807,7 @@
       scroll-snap-type: x mandatory;
       scroll-behavior: smooth;
       -webkit-overflow-scrolling: touch;
-      padding: 1.5rem 1.5rem;
+      padding: 2rem 1.5rem;
     }
 
     /* Create centering effect with pseudo-elements instead of padding */
@@ -2925,11 +2967,16 @@
 
   .why-us-header h2 {
     font-size: var(--display-medium);
-    line-height: var(--line-height-display-medium);
     color: var(--text-primary);
     margin-bottom: var(--space-lg);
-    font-family: var(--font-display);
-    font-weight: 700;
+    line-height: var(--line-height-display-medium);
+  }
+
+  .why-us-header p {
+    font-size: var(--body-large);
+    color: var(--text-secondary);
+    line-height: var(--line-height-body-large);
+    margin-bottom: var(--space-md);
   }
 
   .why-us-grid {
@@ -3080,13 +3127,15 @@
   .contact-header h2 {
     font-size: var(--display-medium);
     color: var(--text-primary);
-    margin-bottom: var(--space-md);
+    margin-bottom: var(--space-lg);
+    line-height: var(--line-height-display-medium);
   }
 
   .contact-header p {
     font-size: var(--body-large);
     color: var(--text-secondary);
-    padding: 0 10px;
+    line-height: var(--line-height-body-large);
+    margin-bottom: var(--space-md);
   }
 
   .contact-form {
@@ -4002,7 +4051,7 @@
       </div>
 
       <!-- Carousel Container -->
-      <div class="carousel-container">
+      <div class="carousel-container fade-in-scroll">
         <!-- Padding tile left -->
         <div class="carousel-padding-tile"></div>
         <!-- Carousel Tiles -->
@@ -4016,7 +4065,7 @@
       </div>
 
       <!-- Dots Navigation -->
-      <div class="carousel-dots"></div>
+      <div class="carousel-dots fade-in-scroll"></div>
     </div>
   </section>
 
