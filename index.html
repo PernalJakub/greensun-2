@@ -11,7 +11,10 @@
   <meta name="msapplication-navbutton-color" content="#f2f2f2" id="ms-nav-color">
   <meta name="apple-mobile-web-app-status-bar-style" content="default" id="apple-status-bar">
   <meta name="mobile-web-app-capable" content="yes">
-  
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="./media/website-icon.svg">
+
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -5415,15 +5418,15 @@ document.addEventListener("DOMContentLoaded", () => {
         // Set initial scroll position immediately (before carousel is visible)
         // This prevents the jump when user scrolls to the gallery
         setTimeout(() => {
-          if (tiles[0]) {
-            const firstTile = tiles[0];
+          if (tiles[2]) {
+            const middleTile = tiles[2];
             const containerWidth = carouselContainer.offsetWidth;
             const tileWidth = 304;
             const centerOffset = (containerWidth / 2) - (tileWidth / 2);
 
-            // Set scroll position without animation
-            const firstTileOffset = firstTile.offsetLeft;
-            carouselContainer.scrollLeft = firstTileOffset - centerOffset;
+            // Set scroll position without animation to center the middle tile
+            const middleTileOffset = middleTile.offsetLeft;
+            carouselContainer.scrollLeft = middleTileOffset - centerOffset;
 
             // Update dots after initial positioning
             setTimeout(() => updateDots(), 50);
