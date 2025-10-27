@@ -445,11 +445,6 @@
       document.documentElement.lang = lang;
       updateContent();
       localStorage.setItem('preferred-language', lang);
-
-      // Update carousel captions if carousel is initialized
-      if (typeof window.updateCarouselLanguage === 'function') {
-        window.updateCarouselLanguage();
-      }
       
       // Update language switcher display
       const currentLangButtons = document.querySelectorAll('.current-lang');
@@ -2763,11 +2758,6 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-  }
-
-  /* Hide mobile line breaks on desktop */
-  .carousel-tile-subtitle .mobile-br {
-    display: none;
   }
 
 
@@ -5102,51 +5092,33 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // ===== GALLERY CAROUSEL =====
     function initGalleryCarousel() {
-      // Multilingual carousel data
-      const carouselTranslations = {
-        pl: [
-          { t: 'Montaż od A do Z', s: 'Od prac ziemnych<br class="mobile-br">po panele — z precyzją.' },
-          { t: 'Farmy PV wodne', s: 'Montaż na akwenach:<br class="mobile-br">platformy i łączenia.' },
-          { t: 'Farmy PV na gruncie', s: 'Kafarowanie, pre-drilling,<br class="mobile-br">konstrukcje i panele.' },
-          { t: 'Dachy i carporty', s: 'Możliwość pracy<br class="mobile-br">na mniejszych inwestycjach.' },
-          { t: 'Prowadzenie projektów', s: 'Ważny jest każdy szczegół.' }
-        ],
-        en: [
-          { t: 'A–Z installation', s: 'From earthworks<br class="mobile-br">to modules—with precision.' },
-          { t: 'Floating PV farms', s: 'Installation on water:<br class="mobile-br">platforms and linking.' },
-          { t: 'Ground-mounted PV farms', s: 'Piling, pre-drilling,<br class="mobile-br">structures & modules.' },
-          { t: 'Roofs & carports', s: 'Capability for<br class="mobile-br">smaller projects.' },
-          { t: 'Project delivery', s: 'Every detail matters.' }
-        ],
-        fr: [
-          { t: 'Montage de A à Z', s: 'Des terrassements<br class="mobile-br">aux modules — avec précision.' },
-          { t: 'Fermes PV flottantes', s: "Montage sur l'eau :<br class=\"mobile-br\">plateformes et raccordements." },
-          { t: 'Fermes PV terrestres', s: 'Battage, forage préalable,<br class="mobile-br">structures et modules.' },
-          { t: 'Toitures & carports', s: "Possibilité d'intervenir<br class=\"mobile-br\">sur de petits projets." },
-          { t: 'Pilotage de projets', s: 'Chaque détail compte.' }
-        ]
-      };
-
-      const carouselImages = [
-        './media/gallery/Montage de A à Z.jpg',
-        './media/gallery/Fermes PV flottantes.jpg',
-        './media/gallery/Fermes PV terrestres.jpg',
-        './media/gallery/Toitures & carports.jpg',
-        './media/gallery/Conduite de projets professionnelle.jpg'
+      const carouselData = [
+        {
+          src: 'https://images.unsplash.com/photo-1509391366360-2e959784a276?w=800',
+          title: 'Pile driving',
+          subtitle: 'Ground-mounted farm'
+        },
+        {
+          src: 'https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?w=800',
+          title: 'Panel installation',
+          subtitle: 'Rooftop project'
+        },
+        {
+          src: 'https://images.unsplash.com/photo-1466611653911-95081537e5b7?w=800',
+          title: 'Solar farm',
+          subtitle: 'Large-scale installation'
+        },
+        {
+          src: 'https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?w=800',
+          title: 'Mounting structures',
+          subtitle: 'Ground-mounted farm'
+        },
+        {
+          src: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=800',
+          title: 'Water farm',
+          subtitle: 'Floating solar panels'
+        }
       ];
-
-      // Get current language carousel data
-      function getCarouselData() {
-        const lang = currentLanguage || 'pl';
-        const texts = carouselTranslations[lang] || carouselTranslations.pl;
-        return texts.map((text, index) => ({
-          src: carouselImages[index],
-          title: text.t,
-          subtitle: text.s
-        }));
-      }
-
-      let carouselData = getCarouselData();
 
       let currentActiveIndex = 2; // Desktop: Start with middle tile active (index 2 out of 0-4)
 
@@ -5207,27 +5179,6 @@ document.addEventListener("DOMContentLoaded", () => {
           });
         });
       }
-
-      // Update carousel captions when language changes
-      function updateCarouselLanguage() {
-        carouselData = getCarouselData();
-        tiles.forEach((tile, index) => {
-          const dataIndex = parseInt(tile.dataset.dataIndex);
-          if (dataIndex >= 0 && dataIndex < carouselData.length) {
-            const data = carouselData[dataIndex];
-            const caption = tile.querySelector('.carousel-tile-caption');
-            if (caption) {
-              caption.innerHTML = `
-                <div class="carousel-tile-title">${data.title}</div>
-                <div class="carousel-tile-subtitle">${data.subtitle}</div>
-              `;
-            }
-          }
-        });
-      }
-
-      // Expose update function globally
-      window.updateCarouselLanguage = updateCarouselLanguage;
 
       // Set active tile by tile position (0-3)
       function setActiveTile(tileIndex) {
