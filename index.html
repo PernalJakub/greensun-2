@@ -1027,6 +1027,7 @@
       background-repeat: no-repeat;
       background-position: center;
       transition: background-image 0.3s ease;
+      cursor: pointer;
     }
     
     [data-theme="dark"] .navbar-section .navbar-logo {
@@ -4588,6 +4589,17 @@ window.addEventListener("scroll", () => {
 
 document.addEventListener("DOMContentLoaded", () => {
   initNavbarSection();
+
+  // Logo click handler - scroll to top
+  const logoElements = document.querySelectorAll('.navbar-logo');
+  logoElements.forEach(logo => {
+    logo.addEventListener('click', () => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    });
+  });
 });
 // JS navbar-section
 
