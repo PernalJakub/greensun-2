@@ -11,7 +11,7 @@ const validator = require('validator');
 const path = require('path');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8080;
 
 // ===== MIDDLEWARE =====
 app.use(helmet()); // Bezpieczeństwo
@@ -29,19 +29,19 @@ const contactLimiter = rateLimit({
 });
 
 // ===== KONFIGURACJA EMAIL =====
-// UWAGA: Uzupełnij poniższe dane o prawdziwe dane SMTP
+// Używa zmiennych środowiskowych z Fly.io secrets
 const emailConfig = {
-  host: 'smtp.gmail.com', // Zamień na swój serwer SMTP
-  port: 587,
+  host: process.env.SMTP_HOST || 'smtp.gmail.com',
+  port: parseInt(process.env.SMTP_PORT || '587'),
   secure: false,
   auth: {
-    user: 'your-email@gmail.com', // TUTAJ WSTAW SWÓJ EMAIL
-    pass: 'your-app-password' // TUTAJ WSTAW HASŁO APLIKACJI
+    user: process.env.SMTP_USER || 'your-email@gmail.com',
+    pass: process.env.SMTP_PASS || 'your-app-password'
   }
 };
 
 // Utwórz transporter do wysyłania email
-const transporter = nodemailer.createTransporter(emailConfig);
+const transporter = nodemailer.createTransport(emailConfig);
 
 // Test połączenia z serwerem email (opcjonalnie)
 transporter.verify((error, success) => {
@@ -166,7 +166,7 @@ app.post('/contact', contactLimiter, async (req, res) => {
     // Konfiguracja wiadomości
     const mailOptions = {
       from: `"GreenSun Contact Form" <${emailConfig.auth.user}>`,
-      to: 'contact@greensun.pl', // TUTAJ WSTAW DOCELOWY ADRES EMAIL
+      to: process.env.CONTACT_EMAIL || emailConfig.auth.user, // Domyślnie wysyła do tego samego adresu
       replyTo: req.body.email,
       subject: emailContent.subject,
       html: emailContent.html,

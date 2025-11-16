@@ -11,8 +11,8 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
 // ===== KONFIGURACJA =====
-define('RECIPIENT_EMAIL', 'contact@greensun.pl'); // TUTAJ WSTAW DOCELOWY EMAIL
-define('SENDER_EMAIL', 'noreply@greensun.pl');    // TUTAJ WSTAW EMAIL NADAWCY
+define('RECIPIENT_EMAIL', 'kubapernal10@gmail.com'); // TUTAJ WSTAW DOCELOWY EMAIL
+define('SENDER_EMAIL', 'kubapernal10@gmail.com');    // TUTAJ WSTAW EMAIL NADAWCY
 define('SENDER_NAME', 'GreenSun Contact Form');
 define('MAX_REQUESTS_PER_HOUR', 5);
 define('RATE_LIMIT_FILE', 'rate_limit.json');
