@@ -6507,37 +6507,39 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Setup legal modal event listeners (using event delegation)
     function setupLegalModals() {
-      // Use event delegation on document for links - works even after content updates
+      // Use event delegation on document - works even after content updates
       document.addEventListener('click', function(e) {
-        const target = e.target.closest('a');
-        if (!target) return;
+        // Check if it's a close button (button element)
+        const closeButton = e.target.closest('.legal-modal-close');
+        if (closeButton) {
+          const modal = closeButton.closest('.legal-modal');
+          if (modal) closeLegalModal(modal);
+          return;
+        }
+
+        // Check if clicking outside modal (on backdrop)
+        if (e.target.classList.contains('legal-modal')) {
+          closeLegalModal(e.target);
+          return;
+        }
+
+        // Check if it's a link
+        const link = e.target.closest('a');
+        if (!link) return;
 
         // Check if it's a privacy or terms link
-        if (target.getAttribute('href') === 'privacy.html' ||
-            target.getAttribute('data-i18n') === 'footer-privacy' ||
-            target.getAttribute('data-i18n') === 'cookie-learn') {
+        if (link.getAttribute('href') === 'privacy.html' ||
+            link.getAttribute('data-i18n') === 'footer-privacy' ||
+            link.getAttribute('data-i18n') === 'cookie-learn') {
           e.preventDefault();
           openLegalModal('privacy');
           return;
         }
 
-        if (target.getAttribute('href') === 'terms.html' ||
-            target.getAttribute('data-i18n') === 'footer-terms') {
+        if (link.getAttribute('href') === 'terms.html' ||
+            link.getAttribute('data-i18n') === 'footer-terms') {
           e.preventDefault();
           openLegalModal('terms');
-          return;
-        }
-
-        // Check if it's a close button
-        if (target.classList.contains('legal-modal-close')) {
-          const modal = target.closest('.legal-modal');
-          if (modal) closeLegalModal(modal);
-          return;
-        }
-
-        // Check if clicking outside modal
-        if (target.classList.contains('legal-modal')) {
-          closeLegalModal(target);
           return;
         }
       });
