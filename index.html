@@ -635,46 +635,55 @@
 
     // Theme Toggle Functionality
     function initializeTheme() {
-      // Check for saved theme preference or default to 'auto'
+      // Check for saved theme preference with expiration (1 hour)
       const savedTheme = localStorage.getItem('theme');
+      const themeTimestamp = localStorage.getItem('themeTimestamp');
       const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      
+
       let theme;
-      if (savedTheme) {
+
+      // Check if saved theme has expired (1 hour = 3600000ms)
+      const oneHour = 3600000;
+      const isExpired = themeTimestamp && (Date.now() - parseInt(themeTimestamp)) > oneHour;
+
+      if (savedTheme && !isExpired) {
+        // Use saved theme if not expired
         theme = savedTheme;
       } else {
-        // Auto-detect based on system preference
+        // Auto-detect based on system preference (expired or no saved theme)
         theme = prefersDark ? 'dark' : 'light';
         localStorage.setItem('theme', theme);
+        localStorage.setItem('themeTimestamp', Date.now().toString());
       }
-      
+
       // Apply theme
       document.documentElement.setAttribute('data-theme', theme);
-      
+
       // Update mobile meta tags
       updateMobileMetaTags(theme);
-      
+
       // Ensure body has the proper background color immediately
       document.body.style.backgroundColor = theme === 'dark' ? '#1a1a1b' : '#f2f2f2';
     }
 
     function setupThemeToggle() {
       const themeToggleButtons = document.querySelectorAll('.theme-toggle');
-      
+
       themeToggleButtons.forEach(button => {
         button.addEventListener('click', function() {
           const currentTheme = document.documentElement.getAttribute('data-theme');
           const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-          
+
           // Apply new theme
           document.documentElement.setAttribute('data-theme', newTheme);
-          
+
           // Update mobile meta tags
           updateMobileMetaTags(newTheme);
-          
-          // Save preference
+
+          // Save preference with timestamp
           localStorage.setItem('theme', newTheme);
-          
+          localStorage.setItem('themeTimestamp', Date.now().toString());
+
           // Add smooth transition for the switch
           button.style.transform = 'scale(0.95)';
           setTimeout(() => {
@@ -687,18 +696,23 @@
     // Listen for system theme changes
     function setupThemeWatcher() {
       const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-      
+
       mediaQuery.addEventListener('change', function(e) {
-        // Only auto-switch if no manual preference is set
+        // Only auto-switch if no manual preference is set or if it expired
         const savedTheme = localStorage.getItem('theme');
-        if (!savedTheme) {
+        const themeTimestamp = localStorage.getItem('themeTimestamp');
+        const oneHour = 3600000;
+        const isExpired = themeTimestamp && (Date.now() - parseInt(themeTimestamp)) > oneHour;
+
+        if (!savedTheme || isExpired) {
           const newTheme = e.matches ? 'dark' : 'light';
           document.documentElement.setAttribute('data-theme', newTheme);
-          
+
           // Update mobile meta tags
           updateMobileMetaTags(newTheme);
-          
+
           localStorage.setItem('theme', newTheme);
+          localStorage.setItem('themeTimestamp', Date.now().toString());
         }
       });
     }
@@ -706,10 +720,24 @@
     // Initialize theme immediately to prevent flash
     (function() {
       const savedTheme = localStorage.getItem('theme');
+      const themeTimestamp = localStorage.getItem('themeTimestamp');
       const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      const theme = savedTheme || (prefersDark ? 'dark' : 'light');
+
+      // Check if saved theme has expired (1 hour)
+      const oneHour = 3600000;
+      const isExpired = themeTimestamp && (Date.now() - parseInt(themeTimestamp)) > oneHour;
+
+      let theme;
+      if (savedTheme && !isExpired) {
+        theme = savedTheme;
+      } else {
+        theme = prefersDark ? 'dark' : 'light';
+        localStorage.setItem('theme', theme);
+        localStorage.setItem('themeTimestamp', Date.now().toString());
+      }
+
       document.documentElement.setAttribute('data-theme', theme);
-      
+
       // Update mobile meta tags immediately
       updateMobileMetaTags(theme);
     })();
