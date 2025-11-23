@@ -5156,29 +5156,34 @@ document.addEventListener("DOMContentLoaded", () => {
       const notification = document.createElement('div');
       notification.className = `notification notification-${type}`;
       notification.textContent = message;
-      
+
       notification.style.cssText = `
         position: fixed;
         top: 20px;
-        right: 20px;
+        left: 50%;
+        transform: translate(-50%, -120%);
         padding: 16px 24px;
         border-radius: 8px;
         color: white;
         font-size: 14px;
+        font-weight: 500;
         z-index: 10000;
-        transform: translateX(100%);
+        max-width: 90%;
+        width: auto;
+        text-align: center;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         transition: transform 0.3s ease;
         background: ${type === 'success' ? 'var(--success)' : type === 'error' ? 'var(--error)' : 'var(--primary-base)'};
       `;
-      
+
       document.body.appendChild(notification);
-      
+
       setTimeout(() => {
-        notification.style.transform = 'translateX(0)';
+        notification.style.transform = 'translate(-50%, 0)';
       }, 100);
-      
+
       setTimeout(() => {
-        notification.style.transform = 'translateX(100%)';
+        notification.style.transform = 'translate(-50%, -120%)';
         setTimeout(() => {
           document.body.removeChild(notification);
         }, 300);
