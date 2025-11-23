@@ -22,13 +22,28 @@ app.use(cors()); // CORS dla frontend
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Rate limiting - maksymalnie 5 wiadomości na godzinę z jednego IP
+// Rate limiting - maksymalnie 10 wiadomości na godzinę z jednego IP
 const contactLimiter = rateLimit({
   windowMs: 60 * 60 * 1000, // 1 godzina
-  max: 5, // maksymalnie 5 requestów
-  message: {
-    error: 'Zbyt wiele wiadomości wysłanych z tego adresu IP. Spróbuj ponownie za godzinę.'
-  }
+  max: 10, // maksymalnie 10 requestów
+  handler: (req, res) => {
+    // Detect language from request
+    const lang = req.body?.language || req.headers['accept-language']?.split(',')[0]?.split('-')[0] || 'pl';
+    const validLang = ['pl', 'en', 'fr'].includes(lang) ? lang : 'pl';
+
+    const rateLimitMessages = {
+      pl: 'Zbyt wiele wiadomości wysłanych z tego adresu IP. Spróbuj ponownie za godzinę.',
+      en: 'Too many messages sent from this IP address. Please try again in an hour.',
+      fr: 'Trop de messages envoyés depuis cette adresse IP. Veuillez réessayer dans une heure.'
+    };
+
+    res.status(429).json({
+      success: false,
+      message: rateLimitMessages[validLang]
+    });
+  },
+  standardHeaders: true,
+  legacyHeaders: false
 });
 
 // ===== KONFIGURACJA EMAIL =====
@@ -68,6 +83,7 @@ const messages = {
     },
     success: 'Wiadomość została wysłana pomyślnie',
     error: 'Wystąpił błąd podczas wysyłania wiadomości. Spróbuj ponownie później.',
+    rateLimit: 'Zbyt wiele wiadomości wysłanych z tego adresu IP. Spróbuj ponownie za godzinę.',
     confirmation: {
       subject: 'Potwierdzenie otrzymania wiadomości - GreenSun',
       title: 'Dziękujemy za kontakt!',
@@ -88,6 +104,7 @@ const messages = {
     },
     success: 'Message sent successfully',
     error: 'An error occurred while sending the message. Please try again later.',
+    rateLimit: 'Too many messages sent from this IP address. Please try again in an hour.',
     confirmation: {
       subject: 'Message confirmation - GreenSun',
       title: 'Thank you for contacting us!',
@@ -108,6 +125,7 @@ const messages = {
     },
     success: 'Message envoyé avec succès',
     error: 'Une erreur s\'est produite lors de l\'envoi du message. Veuillez réessayer plus tard.',
+    rateLimit: 'Trop de messages envoyés depuis cette adresse IP. Veuillez réessayer dans une heure.',
     confirmation: {
       subject: 'Confirmation de réception du message - GreenSun',
       title: 'Merci de nous avoir contactés !',
