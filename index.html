@@ -5127,7 +5127,13 @@ document.addEventListener("DOMContentLoaded", () => {
             showNotification(result.message || formMessages[lang].successFallback, 'success');
           } else {
             const result = await response.json();
-            throw new Error(result.message || formMessages[lang].serverError);
+            // Check if we have validation errors
+            if (result.errors && Array.isArray(result.errors) && result.errors.length > 0) {
+              // Show first error or join all errors
+              throw new Error(result.errors.join('. '));
+            } else {
+              throw new Error(result.message || formMessages[lang].serverError);
+            }
           }
         } catch (error) {
           console.error('Błąd wysyłania formularza:', error);

@@ -224,6 +224,7 @@ function generateEmailContent(data) {
 app.post('/contact', contactLimiter, async (req, res) => {
   try {
     console.log('📨 Otrzymano nową wiadomość kontaktową');
+    console.log('📋 Dane z formularza:', JSON.stringify(req.body, null, 2));
 
     // Pobierz język
     const lang = getLanguage(req);
@@ -231,6 +232,7 @@ app.post('/contact', contactLimiter, async (req, res) => {
     // Walidacja danych
     const validationErrors = validateFormData(req.body, lang);
     if (validationErrors.length > 0) {
+      console.log('❌ Błędy walidacji:', validationErrors);
       return res.status(400).json({
         success: false,
         errors: validationErrors
@@ -251,12 +253,13 @@ app.post('/contact', contactLimiter, async (req, res) => {
     };
 
     // Wysłanie wiadomości
-    await transporter.sendMail(mailOptions);
-
-    console.log('✅ Wiadomość została wysłana pomyślnie');
+    console.log('📧 Wysyłanie wiadomości do:', process.env.CONTACT_EMAIL || emailConfig.auth.user);
+    const mainEmailResult = await transporter.sendMail(mailOptions);
+    console.log('✅ Wiadomość główna wysłana. MessageId:', mainEmailResult.messageId);
 
     // Opcjonalne: Wyślij potwierdzenie do nadawcy
     if (req.body.email) {
+      console.log('📧 Wysyłanie potwierdzenia do:', req.body.email);
       const conf = messages[lang].confirmation;
       const confirmationOptions = {
         from: `"GreenSun" <${emailConfig.auth.user}>`,
@@ -286,8 +289,8 @@ app.post('/contact', contactLimiter, async (req, res) => {
         `
       };
 
-      await transporter.sendMail(confirmationOptions);
-      console.log('✅ Potwierdzenie wysłane do nadawcy');
+      const confirmationResult = await transporter.sendMail(confirmationOptions);
+      console.log('✅ Potwierdzenie wysłane. MessageId:', confirmationResult.messageId);
     }
 
     res.json({
