@@ -432,6 +432,34 @@
 
     let currentLanguage = 'pl';
 
+    // Form messages translations
+    const formMessages = {
+      pl: {
+        sending: 'Wysyłanie...',
+        sent: 'Wysłano!',
+        error: 'Błąd - spróbuj ponownie',
+        serverError: 'Błąd serwera',
+        genericError: 'Wystąpił błąd podczas wysyłania wiadomości.',
+        successFallback: 'Wiadomość została wysłana pomyślnie!'
+      },
+      en: {
+        sending: 'Sending...',
+        sent: 'Sent!',
+        error: 'Error - try again',
+        serverError: 'Server error',
+        genericError: 'An error occurred while sending the message.',
+        successFallback: 'Message sent successfully!'
+      },
+      fr: {
+        sending: 'Envoi en cours...',
+        sent: 'Envoyé !',
+        error: 'Erreur - réessayez',
+        serverError: 'Erreur serveur',
+        genericError: 'Une erreur s\'est produite lors de l\'envoi du message.',
+        successFallback: 'Message envoyé avec succès !'
+      }
+    };
+
     function detectUserLanguage() {
       const browserLang = navigator.language.split('-')[0];
       if (browserLang === 'pl') {
@@ -5008,8 +5036,9 @@ document.addEventListener("DOMContentLoaded", () => {
         
         // Pokaż loading
         submitBtn.disabled = true;
-        submitBtn.textContent = 'Wysyłanie...';
-        
+        const lang = currentLanguage || 'pl';
+        submitBtn.textContent = formMessages[lang].sending;
+
         try {
           const formData = new FormData(form);
           const data = {
@@ -5020,7 +5049,7 @@ document.addEventListener("DOMContentLoaded", () => {
             message: formData.get('message') || '',
             privacy: !!formData.get('privacy'),
             marketing: !!formData.get('marketing'),
-            language: currentLanguage || 'pl'
+            language: lang
           };
 
           const response = await fetch('https://greensun-backend.fly.dev/contact', {
@@ -5030,25 +5059,25 @@ document.addEventListener("DOMContentLoaded", () => {
             },
             body: JSON.stringify(data)
           });
-          
+
           if (response.ok) {
             const result = await response.json();
             // Sukces
-            submitBtn.textContent = 'Wysłano!';
+            submitBtn.textContent = formMessages[lang].sent;
             submitBtn.style.background = 'var(--success)';
             form.reset();
 
             // Pokaż komunikat sukcesu z API
-            showNotification(result.message || 'Wiadomość została wysłana pomyślnie!', 'success');
+            showNotification(result.message || formMessages[lang].successFallback, 'success');
           } else {
             const result = await response.json();
-            throw new Error(result.message || 'Błąd serwera');
+            throw new Error(result.message || formMessages[lang].serverError);
           }
         } catch (error) {
           console.error('Błąd wysyłania formularza:', error);
-          submitBtn.textContent = 'Błąd - spróbuj ponownie';
+          submitBtn.textContent = formMessages[lang].error;
           submitBtn.style.background = 'var(--error)';
-          showNotification(error.message || 'Wystąpił błąd podczas wysyłania wiadomości.', 'error');
+          showNotification(error.message || formMessages[lang].genericError, 'error');
         }
         
         // Przywróć przycisk po 3 sekundach
