@@ -530,9 +530,7 @@
       // Get all required fields
       const requiredInputs = form.querySelectorAll('input[required], textarea[required]');
       requiredInputs.forEach(input => {
-        input.addEventListener('invalid', function(e) {
-          e.preventDefault();
-
+        input.addEventListener('invalid', function() {
           if (this.validity.valueMissing) {
             this.setCustomValidity(messages.valueMissing);
           } else if (this.validity.typeMismatch) {
@@ -551,8 +549,7 @@
       // Handle checkbox separately
       const privacyCheckbox = form.querySelector('input[name="privacy"]');
       if (privacyCheckbox) {
-        privacyCheckbox.addEventListener('invalid', function(e) {
-          e.preventDefault();
+        privacyCheckbox.addEventListener('invalid', function() {
           this.setCustomValidity(messages.checkboxRequired);
         });
 
