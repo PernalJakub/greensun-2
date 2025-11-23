@@ -22,10 +22,10 @@ app.use(cors()); // CORS dla frontend
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Rate limiting - maksymalnie 10 wiadomości na godzinę z jednego IP
+// Rate limiting - maksymalnie 5 wiadomości na godzinę z jednego IP
 const contactLimiter = rateLimit({
   windowMs: 60 * 60 * 1000, // 1 godzina
-  max: 10, // maksymalnie 10 requestów
+  max: 5, // maksymalnie 5 requestów
   handler: (req, res) => {
     // Detect language from request
     const lang = req.body?.language || req.headers['accept-language']?.split(',')[0]?.split('-')[0] || 'pl';

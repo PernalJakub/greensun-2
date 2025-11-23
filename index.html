@@ -3355,6 +3355,15 @@
     resize: vertical;
   }
 
+  /* Prevent auto-zoom on mobile devices when focusing inputs */
+  @media (max-width: 599px) {
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      font-size: 16px;
+    }
+  }
+
   /* Subject Switcher Styles */
   .subject-switcher {
     position: relative;
@@ -3465,7 +3474,8 @@
   }
 
   .checkbox-item input[type="checkbox"] {
-    width: auto;
+    width: 13px;
+    height: 13px;
     margin: 0;
   }
 
