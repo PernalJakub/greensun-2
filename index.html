@@ -440,7 +440,12 @@
         error: 'Błąd - spróbuj ponownie',
         serverError: 'Błąd serwera',
         genericError: 'Wystąpił błąd podczas wysyłania wiadomości.',
-        successFallback: 'Wiadomość została wysłana pomyślnie!'
+        successFallback: 'Wiadomość została wysłana pomyślnie!',
+        // HTML5 validation messages
+        valueMissing: 'Wypełnij to pole.',
+        typeMismatch: 'Wprowadź prawidłowy adres email.',
+        tooShort: 'Pole musi zawierać więcej znaków.',
+        checkboxRequired: 'Zaznacz to pole, jeśli chcesz kontynuować.'
       },
       en: {
         sending: 'Sending...',
@@ -448,7 +453,12 @@
         error: 'Error - try again',
         serverError: 'Server error',
         genericError: 'An error occurred while sending the message.',
-        successFallback: 'Message sent successfully!'
+        successFallback: 'Message sent successfully!',
+        // HTML5 validation messages
+        valueMissing: 'Please fill out this field.',
+        typeMismatch: 'Please enter a valid email address.',
+        tooShort: 'Please lengthen this text.',
+        checkboxRequired: 'Please check this box if you want to proceed.'
       },
       fr: {
         sending: 'Envoi en cours...',
@@ -456,7 +466,12 @@
         error: 'Erreur - réessayez',
         serverError: 'Erreur serveur',
         genericError: 'Une erreur s\'est produite lors de l\'envoi du message.',
-        successFallback: 'Message envoyé avec succès !'
+        successFallback: 'Message envoyé avec succès !',
+        // HTML5 validation messages
+        valueMissing: 'Veuillez remplir ce champ.',
+        typeMismatch: 'Veuillez saisir une adresse e-mail valide.',
+        tooShort: 'Veuillez allonger ce texte.',
+        checkboxRequired: 'Veuillez cocher cette case si vous souhaitez continuer.'
       }
     };
 
@@ -481,7 +496,7 @@
       if (typeof window.updateCarouselLanguage === 'function') {
         window.updateCarouselLanguage();
       }
-      
+
       // Update language switcher display
       const currentLangButtons = document.querySelectorAll('.current-lang');
       currentLangButtons.forEach(button => {
@@ -494,12 +509,56 @@
           text.textContent = lang.toUpperCase();
         }
       });
-      
+
       // Update subject dropdown placeholder if no selection is made
       const subjectText = document.querySelector('.subject-text');
       const hiddenSubjectInput = document.getElementById('subject');
       if (subjectText && hiddenSubjectInput && !hiddenSubjectInput.value) {
         subjectText.textContent = translations[currentLanguage]['subject-placeholder'];
+      }
+
+      // Update HTML5 validation messages
+      updateFormValidation(lang);
+    }
+
+    function updateFormValidation(lang) {
+      const form = document.getElementById('contactForm');
+      if (!form) return;
+
+      const messages = formMessages[lang];
+
+      // Get all required fields
+      const requiredInputs = form.querySelectorAll('input[required], textarea[required]');
+      requiredInputs.forEach(input => {
+        input.addEventListener('invalid', function(e) {
+          e.preventDefault();
+
+          if (this.validity.valueMissing) {
+            this.setCustomValidity(messages.valueMissing);
+          } else if (this.validity.typeMismatch) {
+            this.setCustomValidity(messages.typeMismatch);
+          } else if (this.validity.tooShort) {
+            this.setCustomValidity(messages.tooShort);
+          }
+        });
+
+        // Reset custom validity on input
+        input.addEventListener('input', function() {
+          this.setCustomValidity('');
+        });
+      });
+
+      // Handle checkbox separately
+      const privacyCheckbox = form.querySelector('input[name="privacy"]');
+      if (privacyCheckbox) {
+        privacyCheckbox.addEventListener('invalid', function(e) {
+          e.preventDefault();
+          this.setCustomValidity(messages.checkboxRequired);
+        });
+
+        privacyCheckbox.addEventListener('change', function() {
+          this.setCustomValidity('');
+        });
       }
     }
 
