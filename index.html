@@ -6505,23 +6505,41 @@ document.addEventListener("DOMContentLoaded", () => {
       }, 300);
     }
 
-    // Setup legal modal event listeners
+    // Setup legal modal event listeners (using event delegation)
     function setupLegalModals() {
-      // Close buttons
-      document.querySelectorAll('.legal-modal-close').forEach(button => {
-        button.addEventListener('click', function() {
-          const modal = this.closest('.legal-modal');
-          closeLegalModal(modal);
-        });
-      });
+      // Use event delegation on document for links - works even after content updates
+      document.addEventListener('click', function(e) {
+        const target = e.target.closest('a');
+        if (!target) return;
 
-      // Click outside to close
-      document.querySelectorAll('.legal-modal').forEach(modal => {
-        modal.addEventListener('click', function(e) {
-          if (e.target === this) {
-            closeLegalModal(this);
-          }
-        });
+        // Check if it's a privacy or terms link
+        if (target.getAttribute('href') === 'privacy.html' ||
+            target.getAttribute('data-i18n') === 'footer-privacy' ||
+            target.getAttribute('data-i18n') === 'cookie-learn') {
+          e.preventDefault();
+          openLegalModal('privacy');
+          return;
+        }
+
+        if (target.getAttribute('href') === 'terms.html' ||
+            target.getAttribute('data-i18n') === 'footer-terms') {
+          e.preventDefault();
+          openLegalModal('terms');
+          return;
+        }
+
+        // Check if it's a close button
+        if (target.classList.contains('legal-modal-close')) {
+          const modal = target.closest('.legal-modal');
+          if (modal) closeLegalModal(modal);
+          return;
+        }
+
+        // Check if clicking outside modal
+        if (target.classList.contains('legal-modal')) {
+          closeLegalModal(target);
+          return;
+        }
       });
 
       // ESC key to close
@@ -6531,29 +6549,6 @@ document.addEventListener("DOMContentLoaded", () => {
             closeLegalModal(modal);
           });
         }
-      });
-
-      // Intercept footer links
-      document.querySelectorAll('a[href="privacy.html"], a[data-i18n="footer-privacy"], a[data-i18n="cookie-learn"]').forEach(link => {
-        link.addEventListener('click', function(e) {
-          e.preventDefault();
-          openLegalModal('privacy');
-        });
-      });
-
-      document.querySelectorAll('a[href="terms.html"], a[data-i18n="footer-terms"]').forEach(link => {
-        link.addEventListener('click', function(e) {
-          e.preventDefault();
-          openLegalModal('terms');
-        });
-      });
-
-      // Update form privacy links
-      document.querySelectorAll('.form-privacy a[href="privacy.html"]').forEach(link => {
-        link.addEventListener('click', function(e) {
-          e.preventDefault();
-          openLegalModal('privacy');
-        });
       });
     }
 
