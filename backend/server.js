@@ -14,6 +14,9 @@ const app = express();
 const PORT = process.env.PORT || 8080;
 
 // ===== MIDDLEWARE =====
+// Trust proxy - wymagane dla Fly.io (za reverse proxy)
+app.set('trust proxy', 1);
+
 app.use(helmet()); // Bezpieczeństwo
 app.use(cors()); // CORS dla frontend
 app.use(express.json());
@@ -54,28 +57,99 @@ transporter.verify((error, success) => {
 
 // ===== FUNKCJE POMOCNICZE =====
 
+// Tłumaczenia komunikatów
+const messages = {
+  pl: {
+    validation: {
+      firstName: 'Imię musi mieć co najmniej 2 znaki',
+      email: 'Podaj prawidłowy adres email',
+      message: 'Wiadomość musi mieć co najmniej 10 znaków',
+      privacy: 'Musisz wyrazić zgodę na przetwarzanie danych osobowych'
+    },
+    success: 'Wiadomość została wysłana pomyślnie',
+    error: 'Wystąpił błąd podczas wysyłania wiadomości. Spróbuj ponownie później.',
+    confirmation: {
+      subject: 'Potwierdzenie otrzymania wiadomości - GreenSun',
+      title: 'Dziękujemy za kontakt!',
+      greeting: 'Szanowny/a',
+      body: 'Dziękujemy za wysłanie wiadomości przez naszą stronę internetową. Otrzymaliśmy Twoją wiadomość i skontaktujemy się z Tobą w ciągu 24 godzin.',
+      urgent: 'Jeśli masz pilne pytania, możesz także skontaktować się z nami bezpośrednio:',
+      email: 'Email',
+      phone: 'Telefon',
+      regards: 'Z poważaniem,<br>Zespół GreenSun'
+    }
+  },
+  en: {
+    validation: {
+      firstName: 'First name must be at least 2 characters',
+      email: 'Please provide a valid email address',
+      message: 'Message must be at least 10 characters',
+      privacy: 'You must agree to the processing of personal data'
+    },
+    success: 'Message sent successfully',
+    error: 'An error occurred while sending the message. Please try again later.',
+    confirmation: {
+      subject: 'Message confirmation - GreenSun',
+      title: 'Thank you for contacting us!',
+      greeting: 'Dear',
+      body: 'Thank you for sending a message through our website. We have received your message and will contact you within 24 hours.',
+      urgent: 'If you have urgent questions, you can also contact us directly:',
+      email: 'Email',
+      phone: 'Phone',
+      regards: 'Best regards,<br>GreenSun Team'
+    }
+  },
+  fr: {
+    validation: {
+      firstName: 'Le prénom doit comporter au moins 2 caractères',
+      email: 'Veuillez fournir une adresse e-mail valide',
+      message: 'Le message doit comporter au moins 10 caractères',
+      privacy: 'Vous devez accepter le traitement des données personnelles'
+    },
+    success: 'Message envoyé avec succès',
+    error: 'Une erreur s\'est produite lors de l\'envoi du message. Veuillez réessayer plus tard.',
+    confirmation: {
+      subject: 'Confirmation de réception du message - GreenSun',
+      title: 'Merci de nous avoir contactés !',
+      greeting: 'Cher/Chère',
+      body: 'Merci d\'avoir envoyé un message via notre site Web. Nous avons reçu votre message et vous contacterons dans les 24 heures.',
+      urgent: 'Si vous avez des questions urgentes, vous pouvez également nous contacter directement :',
+      email: 'E-mail',
+      phone: 'Téléphone',
+      regards: 'Cordialement,<br>L\'équipe GreenSun'
+    }
+  }
+};
+
+// Pobierz język z requestu (domyślnie polski)
+function getLanguage(req) {
+  const lang = req.body.language || req.headers['accept-language']?.split(',')[0]?.split('-')[0] || 'pl';
+  return ['pl', 'en', 'fr'].includes(lang) ? lang : 'pl';
+}
+
 // Walidacja danych formularza
-function validateFormData(data) {
+function validateFormData(data, lang = 'pl') {
   const errors = [];
+  const msg = messages[lang].validation;
 
   // Sprawdź imię
   if (!data.firstName || data.firstName.trim().length < 2) {
-    errors.push('Imię musi mieć co najmniej 2 znaki');
+    errors.push(msg.firstName);
   }
 
   // Sprawdź email
   if (!data.email || !validator.isEmail(data.email)) {
-    errors.push('Podaj prawidłowy adres email');
+    errors.push(msg.email);
   }
 
   // Sprawdź wiadomość
   if (!data.message || data.message.trim().length < 10) {
-    errors.push('Wiadomość musi mieć co najmniej 10 znaków');
+    errors.push(msg.message);
   }
 
   // Sprawdź zgodę na przetwarzanie danych
   if (!data.privacy) {
-    errors.push('Musisz wyrazić zgodę na przetwarzanie danych osobowych');
+    errors.push(msg.privacy);
   }
 
   return errors;
@@ -151,8 +225,11 @@ app.post('/contact', contactLimiter, async (req, res) => {
   try {
     console.log('📨 Otrzymano nową wiadomość kontaktową');
 
+    // Pobierz język
+    const lang = getLanguage(req);
+
     // Walidacja danych
-    const validationErrors = validateFormData(req.body);
+    const validationErrors = validateFormData(req.body, lang);
     if (validationErrors.length > 0) {
       return res.status(400).json({
         success: false,
@@ -180,30 +257,30 @@ app.post('/contact', contactLimiter, async (req, res) => {
 
     // Opcjonalne: Wyślij potwierdzenie do nadawcy
     if (req.body.email) {
+      const conf = messages[lang].confirmation;
       const confirmationOptions = {
         from: `"GreenSun" <${emailConfig.auth.user}>`,
         to: req.body.email,
-        subject: 'Potwierdzenie otrzymania wiadomości - GreenSun',
+        subject: conf.subject,
         html: `
           <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
             <div style="background: #ceb37c; color: white; padding: 20px; text-align: center;">
               <h1>GreenSun</h1>
             </div>
-            
+
             <div style="padding: 20px;">
-              <h2>Dziękujemy za kontakt!</h2>
-              <p>Szanowny/a ${sanitizeInput(req.body.firstName)},</p>
-              
-              <p>Dziękujemy za wysłanie wiadomości przez naszą stronę internetową. 
-              Otrzymaliśmy Twoją wiadomość i skontaktujemy się z Tobą w ciągu 24 godzin.</p>
-              
-              <p>Jeśli masz pilne pytania, możesz także skontaktować się z nami bezpośrednio:</p>
+              <h2>${conf.title}</h2>
+              <p>${conf.greeting} ${sanitizeInput(req.body.firstName)},</p>
+
+              <p>${conf.body}</p>
+
+              <p>${conf.urgent}</p>
               <ul>
-                <li>📧 Email: contact@greensun.pl</li>
-                <li>📞 Telefon: +48 123 456 789</li>
+                <li>📧 ${conf.email}: contact@green-sun.net</li>
+                <li>📞 ${conf.phone}: +33 749 78 48 56</li>
               </ul>
-              
-              <p>Z poważaniem,<br>Zespół GreenSun</p>
+
+              <p>${conf.regards}</p>
             </div>
           </div>
         `
@@ -215,15 +292,16 @@ app.post('/contact', contactLimiter, async (req, res) => {
 
     res.json({
       success: true,
-      message: 'Wiadomość została wysłana pomyślnie'
+      message: messages[lang].success
     });
 
   } catch (error) {
     console.error('❌ Błąd podczas wysyłania wiadomości:', error);
 
+    const lang = getLanguage(req);
     res.status(500).json({
       success: false,
-      message: 'Wystąpił błąd podczas wysyłania wiadomości. Spróbuj ponownie później.'
+      message: messages[lang].error
     });
   }
 });
