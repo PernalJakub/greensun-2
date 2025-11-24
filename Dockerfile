@@ -3,6 +3,7 @@ FROM nginx:alpine
 
 # Kopiuj pliki statyczne
 COPY index.html /usr/share/nginx/html/
+COPY css/ /usr/share/nginx/html/css/
 COPY media/ /usr/share/nginx/html/media/
 COPY privacy.html /usr/share/nginx/html/
 COPY terms.html /usr/share/nginx/html/
