@@ -9,6 +9,8 @@ const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
 const validator = require('validator');
 const path = require('path');
+const crypto = require('crypto');
+const cookieParser = require('cookie-parser');
 
 const app = express();
 const PORT = process.env.PORT || 8080;
@@ -17,10 +19,98 @@ const PORT = process.env.PORT || 8080;
 // Trust proxy - wymagane dla Fly.io (za reverse proxy)
 app.set('trust proxy', 1);
 
+// CORS - tylko z dozwolonych domen
+const allowedOrigins = process.env.ALLOWED_ORIGINS
+  ? process.env.ALLOWED_ORIGINS.split(',').map(o => o.trim())
+  : [
+      'https://greensun-2.fly.dev',
+      'https://green-sun.net',
+      'https://www.green-sun.net',
+      'http://localhost:3000',
+      'http://localhost:8080'
+    ];
+
+const corsOptions = {
+  origin: function (origin, callback) {
+    //允许请求没有origin (例如mobile apps, curl)
+    if (!origin) return callback(null, true);
+
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      console.log('❌ CORS blocked origin:', origin);
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
+  optionsSuccessStatus: 200
+};
+
 app.use(helmet()); // Bezpieczeństwo
-app.use(cors()); // CORS dla frontend
+app.use(cors(corsOptions)); // CORS z ograniczeniami
+app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// ===== CSRF PROTECTION =====
+// Store dla tokenów CSRF (w produkcji użyj Redis)
+const csrfTokens = new Map();
+
+// Generowanie CSRF tokenu
+function generateCsrfToken() {
+  return crypto.randomBytes(32).toString('hex');
+}
+
+// Middleware do weryfikacji CSRF tokenu
+function verifyCsrfToken(req, res, next) {
+  const token = req.headers['x-csrf-token'] || req.body._csrf;
+  const sessionId = req.cookies.sessionId;
+
+  if (!token || !sessionId) {
+    const lang = getLanguage(req);
+    return res.status(403).json({
+      success: false,
+      message: lang === 'pl' ? 'Brak tokenu CSRF' :
+               lang === 'fr' ? 'Token CSRF manquant' :
+               'Missing CSRF token'
+    });
+  }
+
+  const storedData = csrfTokens.get(sessionId);
+  if (!storedData || storedData.token !== token) {
+    const lang = getLanguage(req);
+    return res.status(403).json({
+      success: false,
+      message: lang === 'pl' ? 'Nieprawidłowy token CSRF' :
+               lang === 'fr' ? 'Token CSRF invalide' :
+               'Invalid CSRF token'
+    });
+  }
+
+  // Sprawdź czy token nie wygasł
+  if (storedData.expires < Date.now()) {
+    csrfTokens.delete(sessionId);
+    const lang = getLanguage(req);
+    return res.status(403).json({
+      success: false,
+      message: lang === 'pl' ? 'Token CSRF wygasł' :
+               lang === 'fr' ? 'Token CSRF expiré' :
+               'CSRF token expired'
+    });
+  }
+
+  next();
+}
+
+// Czyszczenie starych tokenów (co godzinę)
+setInterval(() => {
+  const now = Date.now();
+  for (const [sessionId, data] of csrfTokens.entries()) {
+    if (typeof data === 'object' && data.expires < now) {
+      csrfTokens.delete(sessionId);
+    }
+  }
+}, 60 * 60 * 1000);
 
 // Rate limiting - maksymalnie 5 wiadomości na godzinę z jednego IP
 const contactLimiter = rateLimit({
@@ -238,8 +328,32 @@ function generateEmailContent(data) {
 
 // ===== ENDPOINTS =====
 
+// Endpoint do pobrania CSRF tokenu
+app.get('/csrf-token', (req, res) => {
+  // Pobierz lub utwórz session ID
+  let sessionId = req.cookies.sessionId;
+  if (!sessionId) {
+    sessionId = crypto.randomBytes(16).toString('hex');
+    res.cookie('sessionId', sessionId, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAge: 24 * 60 * 60 * 1000 // 24 godziny
+    });
+  }
+
+  // Generuj nowy token CSRF
+  const token = generateCsrfToken();
+  csrfTokens.set(sessionId, {
+    token: token,
+    expires: Date.now() + (24 * 60 * 60 * 1000) // 24 godziny
+  });
+
+  res.json({ csrfToken: token });
+});
+
 // Endpoint do obsługi formularza kontaktowego
-app.post('/contact', contactLimiter, async (req, res) => {
+app.post('/contact', contactLimiter, verifyCsrfToken, async (req, res) => {
   try {
     console.log('📨 Otrzymano nową wiadomość kontaktową');
     console.log('📋 Dane z formularza:', JSON.stringify(req.body, null, 2));

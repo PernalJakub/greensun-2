@@ -279,19 +279,19 @@ try {
                 </div>
                 
                 <div style='padding: 20px;'>
-                    <h2>Dziękujemy za kontakt!</h2>
-                    <p>Szanowny/a {$emailContent['safe_data']['firstName']},</p>
+                    <h2>Thank you for contacting us!</h2>
+                    <p>Dear {$emailContent['safe_data']['firstName']},</p>
                     
-                    <p>Dziękujemy za wysłanie wiadomości przez naszą stronę internetową. 
-                    Otrzymaliśmy Twoją wiadomość i skontaktujemy się z Tobą w ciągu 24 godzin.</p>
+                    <p>Thank you for sending a message through our website. 
+                    We have received your message and will contact you as soon as possible.</p>
                     
-                    <p>Jeśli masz pilne pytania, możesz także skontaktować się z nami bezpośrednio:</p>
+                    <p>If you have urgent questions, you can also contact us directly:</p>
                     <ul>
-                        <li>📧 Email: contact@greensun.pl</li>
-                        <li>📞 Telefon: +48 123 456 789</li>
+                        <li>📧 Email: contact@green-sun.net</li>
+                        <li>📞 Phone: +33 749 78 48 56</li>
                     </ul>
                     
-                    <p>Z poważaniem,<br>Zespół GreenSun</p>
+                    <p>Best regards,<br>GreenSun Team</p>
                 </div>
             </div>
         </body>
