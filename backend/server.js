@@ -336,8 +336,8 @@ app.get('/csrf-token', (req, res) => {
     sessionId = crypto.randomBytes(16).toString('hex');
     res.cookie('sessionId', sessionId, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
+      secure: true, // Zawsze true dla cross-domain
+      sameSite: 'none', // Zmienione z 'strict' na 'none' dla cross-domain
       maxAge: 24 * 60 * 60 * 1000 // 24 godziny
     });
   }
