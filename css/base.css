@@ -1,0 +1,84 @@
+/**
+ * GreenSun Base Styles
+ * Reset, typography, and fundamental styles
+ */
+
+/* ===== CSS RESET ===== */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+/* Prevent horizontal scrolling on all elements */
+* {
+  max-width: 100%;
+}
+
+html {
+  overflow-x: hidden;
+}
+
+body {
+  margin: 0;
+  background: var(--neutral-very-light);
+  color: var(--text-primary);
+  font-family: var(--font-rest);
+  overflow-x: hidden;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  width: 100%;
+  max-width: 100vw;
+}
+
+h1, h2, h3, h4, h5, h6, p {
+  margin: 0;
+  padding: 0;
+}
+
+/* ===== TYPOGRAPHY ===== */
+
+h1, h2 {
+  font-family: var(--font-display);
+  font-weight: 700;
+}
+
+h3, h4 {
+  font-family: var(--font-display);
+  font-weight: 600;
+}
+
+h5, h6 {
+  font-family: var(--font-display);
+  font-weight: 500;
+}
+
+p, span, div, a, button, input, textarea, label {
+  font-family: var(--font-rest);
+  font-weight: 400;
+}
+
+/* ===== UTILITY CLASSES ===== */
+
+/* Font Weights */
+.font-weight-light { font-weight: 300; }
+.font-weight-normal { font-weight: 400; }
+.font-weight-medium { font-weight: 500; }
+.font-weight-semibold { font-weight: 600; }
+.font-weight-bold { font-weight: 700; }
+.font-weight-extrabold { font-weight: 800; }
+
+/* Gradient Text Effects */
+.green {
+  background: linear-gradient(90deg, var(--bg-primary) 35%, var(--primary-base) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+  font-weight: 700;
+}
+
+.green-simple {
+  background: linear-gradient(135deg, #1fc55c 0%, #2de3b9 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 700;
+}
