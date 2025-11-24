@@ -2,7 +2,6 @@
 // Utility functions: animations, counters, cookies, service toggles
 
 function initScrollAnimations() {
-function initScrollAnimations() {
   const observerOptions = {
     threshold: 0.1,
     rootMargin: '0px 0px -50px 0px'
@@ -23,25 +22,27 @@ function initScrollAnimations() {
 }
 
 function toggleService(button) {
-function toggleService(button) {
   const card = button.closest('.service-card');
   const details = button.nextElementSibling;
   const isExpanded = details.classList.contains('expanded');
+
+  // Get translations from language module
+  const translations = window.languageModule ? window.languageModule.translations : {};
+  const currentLanguage = window.languageModule ? window.languageModule.currentLanguage : 'pl';
 
   if (isExpanded) {
     card.classList.remove('expanded');
     details.classList.remove('expanded');
     button.setAttribute('data-i18n', 'learn-more');
-    button.textContent = translations[currentLanguage]['learn-more'];
+    button.textContent = translations[currentLanguage] ? translations[currentLanguage]['learn-more'] : 'Dowiedz się więcej';
   } else {
     card.classList.add('expanded');
     details.classList.add('expanded');
     button.setAttribute('data-i18n', 'btn-collapse');
-    button.textContent = translations[currentLanguage]['btn-collapse'];
+    button.textContent = translations[currentLanguage] ? translations[currentLanguage]['btn-collapse'] : 'Zwiń';
   }
 }
 
-const observeCounters = () => {
 const observeCounters = () => {
   const counters = document.querySelectorAll(".count");
   const counterObserver = new IntersectionObserver((entries) => {
@@ -65,11 +66,10 @@ const observeCounters = () => {
       }
     });
   });
-  
+
   counters.forEach(counter => counterObserver.observe(counter));
 };
 
-const observeStatCounters = () => {
 const observeStatCounters = () => {
   const statNumbers = document.querySelectorAll(".about-stat-number");
 
@@ -117,10 +117,9 @@ const observeStatCounters = () => {
 };
 
 function showCookieBanner() {
-function showCookieBanner() {
   const banner = document.getElementById('cookieBanner');
   const hasConsent = localStorage.getItem('cookieConsent');
-  
+
   if (!hasConsent) {
     setTimeout(() => {
       banner.classList.add('visible');
@@ -129,15 +128,13 @@ function showCookieBanner() {
 }
 
 function acceptCookies() {
-function acceptCookies() {
   localStorage.setItem('cookieConsent', 'accepted');
   document.getElementById('cookieBanner').classList.remove('visible');
-  
+
   // Tutaj możesz włączyć dodatkowe skrypty po zgodzie
   // np. Google Analytics, Meta Pixel itp.
 }
 
-function declineCookies() {
 function declineCookies() {
   localStorage.setItem('cookieConsent', 'declined');
   document.getElementById('cookieBanner').classList.remove('visible');
