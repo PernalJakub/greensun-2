@@ -7,8 +7,6 @@ COPY css/ /usr/share/nginx/html/css/
 COPY js/ /usr/share/nginx/html/js/
 COPY data/ /usr/share/nginx/html/data/
 COPY media/ /usr/share/nginx/html/media/
-COPY privacy.html /usr/share/nginx/html/
-COPY terms.html /usr/share/nginx/html/
 
 # Opcjonalnie: konfiguracja nginx dla SPA
 RUN echo 'server { \
