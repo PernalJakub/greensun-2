@@ -64,9 +64,10 @@
     // Translations loaded from external JSON files via i18n module
     let translations = {};
     let formMessages = {};
+    let translationsReady = false;
 
-    // Initialize translations asynchronously
-    (async function initTranslations() {
+    // Promise that resolves when translations are loaded
+    const translationsLoadedPromise = (async function initTranslations() {
       try {
         // Load all languages
         await window.i18n.loadAllLanguages();
@@ -118,13 +119,19 @@
           }
         };
 
+        translationsReady = true;
+
         // Initialize the page after translations are loaded
         detectUserLanguage();
+
+        return true;
       } catch (error) {
         console.error('Failed to load translations:', error);
         // Fallback to empty objects - user will see translation keys
         translations = { pl: {}, en: {}, fr: {} };
         formMessages = { pl: {}, en: {}, fr: {} };
+        translationsReady = true;
+        return false;
       }
     })();
 
@@ -133,18 +140,29 @@
 
     // DEPRECATED: Form messages now loaded from external JSON files via i18n module (see above)
 
-    function detectUserLanguage() {
+    async function detectUserLanguage() {
+      // Check if user has a saved language preference
+      const savedLang = localStorage.getItem('preferred-language');
+      if (savedLang && ['pl', 'en', 'fr'].includes(savedLang)) {
+        await setLanguage(savedLang);
+        return;
+      }
+
+      // Otherwise, detect from browser language
       const browserLang = navigator.language.split('-')[0];
       if (browserLang === 'pl') {
-        setLanguage('pl');
+        await setLanguage('pl');
       } else if (browserLang === 'fr') {
-        setLanguage('fr');
+        await setLanguage('fr');
       } else {
-        setLanguage('en');
+        await setLanguage('en');
       }
     }
 
-    function setLanguage(lang) {
+    async function setLanguage(lang) {
+      // Wait for translations to be loaded
+      await translationsLoadedPromise;
+
       currentLanguage = lang;
       document.documentElement.lang = lang;
       updateContent();
@@ -255,7 +273,9 @@
     }
 
     function initializeLanguage() {
-      detectUserLanguage();
+      // Language is initialized in initTranslations() after translations are loaded
+      // This function is kept for compatibility but does nothing
+      // Translation detection happens automatically in initTranslations
     }
 
     function setupLanguageSwitcher() {
@@ -273,10 +293,10 @@
         });
         
         languageButtons.forEach(button => {
-          button.addEventListener('click', (e) => {
+          button.addEventListener('click', async (e) => {
             e.preventDefault();
             const lang = button.getAttribute('data-lang');
-            setLanguage(lang);
+            await setLanguage(lang);
             dropdown.classList.remove('show');
           });
         });
