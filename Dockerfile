@@ -8,6 +8,10 @@ COPY js/ /usr/share/nginx/html/js/
 COPY data/ /usr/share/nginx/html/data/
 COPY media/ /usr/share/nginx/html/media/
 
+# Kopiuj pliki SEO
+COPY sitemap.xml /usr/share/nginx/html/
+COPY robots.txt /usr/share/nginx/html/
+
 # Opcjonalnie: konfiguracja nginx dla SPA
 RUN echo 'server { \
     listen 8080; \

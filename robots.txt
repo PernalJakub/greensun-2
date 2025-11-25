@@ -1,0 +1,44 @@
+# robots.txt for GreenSun - https://greensun-2.fly.dev/
+
+# Allow all search engines to crawl the site
+User-agent: *
+Allow: /
+
+# Disallow admin or private areas (if any in future)
+# Disallow: /admin/
+# Disallow: /private/
+
+# Allow specific paths
+Allow: /media/
+Allow: /css/
+Allow: /js/
+Allow: /data/
+
+# Sitemap location
+Sitemap: https://greensun-2.fly.dev/sitemap.xml
+
+# Crawl-delay (optional - helps with server load)
+# Crawl-delay: 1
+
+# Specific rules for major search engines
+
+# Google
+User-agent: Googlebot
+Allow: /
+Disallow: /cgi-bin/
+
+# Google Images
+User-agent: Googlebot-Image
+Allow: /media/
+
+# Bing
+User-agent: Bingbot
+Allow: /
+
+# Yandex
+User-agent: Yandex
+Allow: /
+
+# French search engines
+User-agent: Qwant
+Allow: /

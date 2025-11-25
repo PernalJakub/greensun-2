@@ -3,10 +3,39 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <!-- UWAGA DEV: Zaktualizuj SEO title i meta z aktualnym profilem -->
-  <title>GreenSun. - Profesjonalny montaż farm fotowoltaicznych</title>
-  <meta name="description" content="GreenSun - specjalizujemy się w montażu farm fotowoltaicznych na lądzie i wodzie. Ponad 1000 MW zrealizowanych projektów w Europie.">
-  <meta name="keywords" content="fotowoltaika, farmy PV, montaż paneli słonecznych, energia słoneczna, wodne farmy fotowoltaiczne">
+
+  <!-- SEO Meta Tags - Multilingual -->
+  <title data-i18n="meta-title">GreenSun | Sous-traitant Montage Fermes Photovoltaïques France</title>
+  <meta name="description" data-i18n="meta-description" content="Entreprise spécialisée en montage et installation de fermes photovoltaïques. Sous-traitance pour EPC et maîtres d'œuvre. Plus de 1000 MW installés en Europe.">
+  <meta name="keywords" content="sous-traitant photovoltaïque, montage ferme solaire, installation panneaux photovoltaïques, entreprise EPC, parc solaire, centrale photovoltaïque, sous-traitance énergie solaire">
+  <meta name="author" content="GreenSun">
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+  <link rel="canonical" href="https://greensun-2.fly.dev/">
+
+  <!-- Hreflang Tags for Multilingual SEO -->
+  <link rel="alternate" hreflang="fr" href="https://greensun-2.fly.dev/?lang=fr" />
+  <link rel="alternate" hreflang="pl" href="https://greensun-2.fly.dev/?lang=pl" />
+  <link rel="alternate" hreflang="en" href="https://greensun-2.fly.dev/?lang=en" />
+  <link rel="alternate" hreflang="x-default" href="https://greensun-2.fly.dev/" />
+
+  <!-- Open Graph / Facebook Meta Tags -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://greensun-2.fly.dev/">
+  <meta property="og:title" content="GreenSun | Sous-traitant Montage Fermes Photovoltaïques">
+  <meta property="og:description" content="Entreprise spécialisée en montage et installation de fermes photovoltaïques. Sous-traitance pour EPC et maîtres d'œuvre.">
+  <meta property="og:image" content="https://greensun-2.fly.dev/media/og-image.jpg">
+  <meta property="og:locale" content="fr_FR">
+  <meta property="og:locale:alternate" content="pl_PL">
+  <meta property="og:locale:alternate" content="en_US">
+
+  <!-- Twitter Card Meta Tags -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content="https://greensun-2.fly.dev/">
+  <meta name="twitter:title" content="GreenSun | Sous-traitant Montage Fermes Photovoltaïques">
+  <meta name="twitter:description" content="Entreprise spécialisée en montage et installation de fermes photovoltaïques. Sous-traitance pour EPC et maîtres d'œuvre.">
+  <meta name="twitter:image" content="https://greensun-2.fly.dev/media/og-image.jpg">
+
+  <!-- Mobile Theme Colors -->
   <meta name="theme-color" content="#f2f2f2" id="theme-color-meta">
   <meta name="msapplication-navbutton-color" content="#f2f2f2" id="ms-nav-color">
   <meta name="apple-mobile-web-app-status-bar-style" content="default" id="apple-status-bar">
@@ -44,6 +73,77 @@
     gtag('config', 'G-15X4R8YW89');
   </script>
   
+  <!-- Schema.org Structured Data (JSON-LD) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "GreenSun",
+    "url": "https://greensun-2.fly.dev",
+    "logo": "https://greensun-2.fly.dev/media/website-icon.svg",
+    "description": "Entreprise spécialisée en montage et installation de fermes photovoltaïques. Sous-traitance pour EPC et maîtres d'œuvre.",
+    "address": {
+      "@type": "PostalAddress",
+      "addressCountry": "PL"
+    },
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "contactType": "Customer Service",
+      "availableLanguage": ["French", "Polish", "English"]
+    },
+    "sameAs": [
+      "https://www.linkedin.com/company/greensun"
+    ]
+  }
+  </script>
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "serviceType": "Installation de fermes photovoltaïques",
+    "provider": {
+      "@type": "Organization",
+      "name": "GreenSun"
+    },
+    "areaServed": {
+      "@type": "Country",
+      "name": "France"
+    },
+    "description": "Montage et installation de parcs photovoltaïques au sol et sur toiture. Sous-traitance pour entreprises EPC et maîtres d'œuvre.",
+    "hasOfferCatalog": {
+      "@type": "OfferCatalog",
+      "name": "Services photovoltaïques",
+      "itemListElement": [
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Montage de structures photovoltaïques",
+            "description": "Installation de structures au sol pour fermes photovoltaïques"
+          }
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Installation sur toiture industrielle",
+            "description": "Montage de panneaux photovoltaïques sur toitures commerciales et industrielles"
+          }
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@type": "Service",
+            "name": "Raccordement électrique",
+            "description": "Câblage et connexion des installations photovoltaïques"
+          }
+        }
+      ]
+    }
+  }
+  </script>
+
   <!-- Internationalization Script -->
   <!-- JavaScript Modules -->
   <script src="./js/theme.js"></script>
