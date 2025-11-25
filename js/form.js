@@ -63,10 +63,13 @@ function initContactForm() {
     const submitBtn = form.querySelector('.submit-btn');
     const originalText = submitBtn.textContent;
 
+    // Get language and messages from language module
+    const lang = (window.languageModule ? window.languageModule.currentLanguage : null) || 'pl';
+    const formMessages = window.languageModule ? window.languageModule.formMessages : {};
+
     // Pokaż loading
     submitBtn.disabled = true;
-    const lang = currentLanguage || 'pl';
-    submitBtn.textContent = formMessages[lang].sending;
+    submitBtn.textContent = formMessages[lang] ? formMessages[lang].sending : 'Wysyłanie...';
 
     try {
       // Pobierz CSRF token
@@ -102,12 +105,12 @@ function initContactForm() {
       if (response.ok) {
         const result = await response.json();
         // Sukces
-        submitBtn.textContent = formMessages[lang].sent;
+        submitBtn.textContent = formMessages[lang] ? formMessages[lang].sent : 'Wysłano!';
         submitBtn.style.background = 'var(--success)';
         form.reset();
 
         // Pokaż komunikat sukcesu z API
-        showNotification(result.message || formMessages[lang].successFallback, 'success');
+        showNotification(result.message || (formMessages[lang] ? formMessages[lang].successFallback : 'Wysłano pomyślnie!'), 'success');
       } else {
         const result = await response.json();
         // Check if we have validation errors
@@ -115,14 +118,14 @@ function initContactForm() {
           // Show first error or join all errors
           throw new Error(result.errors.join('. '));
         } else {
-          throw new Error(result.message || formMessages[lang].serverError);
+          throw new Error(result.message || (formMessages[lang] ? formMessages[lang].serverError : 'Błąd serwera'));
         }
       }
     } catch (error) {
       console.error('Błąd wysyłania formularza:', error);
-      submitBtn.textContent = formMessages[lang].error;
+      submitBtn.textContent = formMessages[lang] ? formMessages[lang].error : 'Błąd';
       submitBtn.style.background = 'var(--error)';
-      showNotification(error.message || formMessages[lang].genericError, 'error');
+      showNotification(error.message || (formMessages[lang] ? formMessages[lang].genericError : 'Wystąpił błąd'), 'error');
     }
     
     // Przywróć przycisk po 3 sekundach
