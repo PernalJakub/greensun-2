@@ -2,7 +2,6 @@
 // Handles contact form submission with CSRF protection
 
 function initContactForm() {
-function initContactForm() {
   const form = document.getElementById('contactForm');
   
   // Initialize subject switcher
@@ -135,7 +134,6 @@ function initContactForm() {
   });
 }
 
-function showNotification(message, type = 'info') {
 function showNotification(message, type = 'info') {
   const notification = document.createElement('div');
   notification.className = `notification notification-${type}`;

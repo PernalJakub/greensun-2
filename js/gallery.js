@@ -2,7 +2,6 @@
 // Handles image carousel with multilingual captions
 
 function initGalleryCarousel() {
-function initGalleryCarousel() {
   // Multilingual carousel data
   const carouselTranslations = {
       pl: [
@@ -38,7 +37,7 @@ function initGalleryCarousel() {
 
   // Get current language carousel data
   function getCarouselData() {
-    const lang = currentLanguage || 'pl';
+    const lang = (window.languageModule ? window.languageModule.currentLanguage : null) || 'pl';
     const texts = carouselTranslations[lang] || carouselTranslations.pl;
     return texts.map((text, index) => ({
       src: carouselImages[index],
