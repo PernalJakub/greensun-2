@@ -26,6 +26,8 @@ const allowedOrigins = process.env.ALLOWED_ORIGINS
       'https://greensun-2.fly.dev',
       'https://green-sun.net',
       'https://www.green-sun.net',
+      'https://green-sun.com.pl',
+      'https://www.green-sun.com.pl',
       'http://localhost:3000',
       'http://localhost:8080'
     ];
