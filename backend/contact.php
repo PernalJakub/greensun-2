@@ -287,7 +287,7 @@ try {
                     
                     <p>If you have urgent questions, you can also contact us directly:</p>
                     <ul>
-                        <li>📧 Email: contact@green-sun.net</li>
+                        <li>📧 Email: contact@green-sun.com.pl</li>
                         <li>📞 Phone: +33 749 78 48 56</li>
                     </ul>
                     

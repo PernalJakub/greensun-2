@@ -413,7 +413,7 @@ app.post('/contact', contactLimiter, verifyCsrfToken, async (req, res) => {
 
               <p>${conf.urgent}</p>
               <ul>
-                <li>📧 ${conf.email}: contact@green-sun.net</li>
+                <li>📧 ${conf.email}: contact@green-sun.com.pl</li>
                 <li>📞 ${conf.phone}: +33 749 78 48 56</li>
               </ul>
 
