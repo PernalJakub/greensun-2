@@ -1882,6 +1882,10 @@
       scroll-behavior: smooth;
       -webkit-overflow-scrolling: touch;
       padding: 2rem 1.5rem;
+      /* Android scrolling fixes */
+      touch-action: pan-x;
+      overscroll-behavior-x: contain;
+      overscroll-behavior-y: none;
     }
 
     .gallery-header h2::after {
@@ -1909,11 +1913,13 @@
       max-width: 304px;
       width: 304px;
       scroll-snap-align: center;
-      scroll-snap-stop: always;
+      scroll-snap-stop: normal;
       opacity: 0.6;
       transform: scale(1);
       transition: opacity 0.3s ease,
                   transform 0.3s ease;
+      /* Android touch optimization */
+      -webkit-tap-highlight-color: transparent;
     }
 
     .carousel-tile.active {
