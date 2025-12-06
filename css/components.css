@@ -1876,7 +1876,7 @@
     .carousel-container {
       display: flex;
       gap: 1rem;
-      overflow-x: auto;
+      overflow-x: scroll;
       overflow-y: visible;
       scroll-snap-type: x mandatory;
       scroll-behavior: smooth;
@@ -1886,6 +1886,9 @@
       touch-action: pan-x;
       overscroll-behavior-x: contain;
       overscroll-behavior-y: none;
+      /* Ensure scrolling works on all devices */
+      scrollbar-width: none; /* Firefox */
+      -ms-overflow-style: none; /* IE and Edge */
     }
 
     .gallery-header h2::after {

@@ -318,6 +318,31 @@ function initGalleryCarousel() {
       }
     }, 0);
 
+    // Touch event handling for better Android compatibility
+    let touchStartX = 0;
+    let touchStartY = 0;
+    let scrollStart = 0;
+    let isDragging = false;
+
+    carouselContainer.addEventListener('touchstart', (e) => {
+      touchStartX = e.touches[0].clientX;
+      touchStartY = e.touches[0].clientY;
+      scrollStart = carouselContainer.scrollLeft;
+      isDragging = false;
+    }, { passive: true });
+
+    carouselContainer.addEventListener('touchmove', (e) => {
+      const touchX = e.touches[0].clientX;
+      const touchY = e.touches[0].clientY;
+      const deltaX = touchStartX - touchX;
+      const deltaY = touchStartY - touchY;
+
+      // If horizontal swipe is dominant, prevent vertical scroll
+      if (Math.abs(deltaX) > Math.abs(deltaY)) {
+        isDragging = true;
+      }
+    }, { passive: true });
+
     // Update dots when scrolling - use multiple timeouts to catch the snap
     let scrollTimeout1, scrollTimeout2;
 
