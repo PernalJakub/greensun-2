@@ -48,7 +48,7 @@ function initGalleryCarousel() {
 
   let carouselData = getCarouselData();
 
-  let currentActiveIndex = 7; // Desktop: Start with middle tile active (index 7 out of 0-14)
+  let currentActiveIndex = 2; // Desktop: Start with middle tile active (index 2 out of 0-4)
 
   const tiles = document.querySelectorAll('.carousel-tile');
   const dotsContainer = document.querySelector('.carousel-dots');
@@ -303,8 +303,8 @@ function initGalleryCarousel() {
     // Set initial scroll position immediately (before carousel is visible)
     // This prevents the jump when user scrolls to the gallery
     setTimeout(() => {
-      if (tiles[7]) {
-        const middleTile = tiles[7];
+      if (tiles[2]) {
+        const middleTile = tiles[2];
         const containerWidth = carouselContainer.offsetWidth;
         const tileWidth = 304;
         const centerOffset = (containerWidth / 2) - (tileWidth / 2);
