@@ -11,8 +11,8 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
 // ===== KONFIGURACJA =====
-define('RECIPIENT_EMAIL', 'kubapernal10@gmail.com'); // TUTAJ WSTAW DOCELOWY EMAIL
-define('SENDER_EMAIL', 'kubapernal10@gmail.com');    // TUTAJ WSTAW EMAIL NADAWCY
+define('RECIPIENT_EMAIL', 'contact@green-sun.com.pl'); // TUTAJ WSTAW DOCELOWY EMAIL
+define('SENDER_EMAIL', 'contact@green-sun.com.pl');    // TUTAJ WSTAW EMAIL NADAWCY
 define('SENDER_NAME', 'GreenSun Contact Form');
 define('MAX_REQUESTS_PER_HOUR', 5);
 define('RATE_LIMIT_FILE', 'rate_limit.json');
@@ -135,8 +135,8 @@ function generateEmailContent($data) {
     </head>
     <body style='font-family: Arial, sans-serif; margin: 0; padding: 0;'>
         <div style='max-width: 600px; margin: 0 auto;'>
-            <div style='background: #ceb37c; color: white; padding: 20px; text-align: center;'>
-                <h1>Nowa wiadomość ze strony GreenSun</h1>
+            <div style='background: #2ed967; color: white; padding: 20px; text-align: center;'>
+                <h1>Nowa wiadomość ze strony GreenSun.</h1>
             </div>
             
             <div style='padding: 20px; background: #f9f9f9;'>
@@ -274,8 +274,8 @@ try {
         </head>
         <body style='font-family: Arial, sans-serif; margin: 0; padding: 0;'>
             <div style='max-width: 600px; margin: 0 auto;'>
-                <div style='background: #ceb37c; color: white; padding: 20px; text-align: center;'>
-                    <h1>GreenSun</h1>
+                <div style='background: #2ed967; color: white; padding: 20px; text-align: center;'>
+                    <h1>GreenSun.</h1>
                 </div>
                 
                 <div style='padding: 20px;'>
