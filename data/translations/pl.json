@@ -132,5 +132,7 @@
   "form-valueMissing": "Wypełnij to pole.",
   "form-typeMismatch": "Wprowadź prawidłowy adres email.",
   "form-tooShort": "Pole musi zawierać więcej znaków.",
-  "form-checkboxRequired": "Zaznacz to pole, jeśli chcesz kontynuować."
+  "form-checkboxRequired": "Zaznacz to pole, jeśli chcesz kontynuować.",
+  "social-title": "Wkrótce w mediach społecznościowych!",
+  "social-message": "Już wkrótce uruchomimy nasze profile w mediach społecznościowych. Śledź nas, aby być na bieżąco z naszymi projektami i aktualnościami!"
 }

@@ -263,9 +263,9 @@
             </div>
           </div>
         </button>
-        <a href="https://www.facebook.com/greensun" target="_blank" rel="noopener" class="icon-facebook"></a>
-        <a href="https://www.instagram.com/greensun" target="_blank" rel="noopener" class="icon-instagram"></a>
-        <a href="https://www.linkedin.com" target="_blank" rel="noopener" class="icon-linkedin"></a>
+        <a href="#" class="icon-facebook social-link" data-social="facebook"></a>
+        <a href="#" class="icon-instagram social-link" data-social="instagram"></a>
+        <a href="#" class="icon-linkedin social-link" data-social="linkedin"></a>
       </div>
       </div>
     </div>
@@ -277,9 +277,9 @@
         <button class="nav-link" data-section="contact-section" data-i18n="nav-contact">Kontakt</button>
       </div>
       <div class="mobile-nav-right">
-        <a href="https://www.facebook.com/greensun" target="_blank" rel="noopener" class="icon-facebook-mobile"></a>
-        <a href="https://www.instagram.com/greensun" target="_blank" rel="noopener" class="icon-instagram-mobile"></a>
-        <a href="https://www.linkedin.com" target="_blank" rel="noopener" class="icon-linkedin-mobile"></a>
+        <a href="#" class="icon-facebook-mobile social-link" data-social="facebook"></a>
+        <a href="#" class="icon-instagram-mobile social-link" data-social="instagram"></a>
+        <a href="#" class="icon-linkedin-mobile social-link" data-social="linkedin"></a>
       </div>
     </div>
   </section>
@@ -675,9 +675,9 @@
           <p data-i18n="footer-description">Profesjonalny montaż farm fotowoltaicznych na lądzie i wodzie. Tworzymy zrównoważoną przyszłość energetyczną w całej Europie.</p>
           <div class="footer-social">
             <!-- Ikony social media będą załadowane przez JS -->
-            <a href="https://www.facebook.com" target="_blank" class="icon-facebook-footer"></a>
-            <a href="https://www.instagram.com" target="_blank" class="icon-instagram-footer"></a>
-            <a href="https://www.linkedin.com" target="_blank" class="icon-linkedin-footer"></a>
+            <a href="#" class="icon-facebook-footer social-link" data-social="facebook"></a>
+            <a href="#" class="icon-instagram-footer social-link" data-social="instagram"></a>
+            <a href="#" class="icon-linkedin-footer social-link" data-social="linkedin"></a>
           </div>
         </div>
         
@@ -766,6 +766,19 @@
         <h1 class="legal-modal-title" data-i18n="terms-title">Regulamin</h1>
         <div class="legal-modal-text" id="termsContent">
           <!-- Content will be loaded by JavaScript based on language -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Social Media Coming Soon Modal -->
+  <div id="socialModal" class="legal-modal">
+    <div class="legal-modal-content">
+      <button class="legal-modal-close" aria-label="Close">&times;</button>
+      <div class="legal-modal-body">
+        <h1 class="legal-modal-title" data-i18n="social-title">Wkrótce w mediach społecznościowych!</h1>
+        <div class="legal-modal-text" id="socialContent">
+          <p data-i18n="social-message">Już wkrótce uruchomimy nasze profile w mediach społecznościowych. Śledź nas, aby być na bieżąco z naszymi projektami i aktualnościami!</p>
         </div>
       </div>
     </div>
@@ -1427,6 +1440,13 @@
             link.getAttribute('data-i18n') === 'footer-terms') {
           e.preventDefault();
           openLegalModal('terms');
+          return;
+        }
+
+        // Check if it's a social media link
+        if (link.classList.contains('social-link')) {
+          e.preventDefault();
+          openLegalModal('social');
           return;
         }
       });

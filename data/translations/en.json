@@ -132,5 +132,7 @@
   "form-valueMissing": "Please fill out this field.",
   "form-typeMismatch": "Please enter a valid email address.",
   "form-tooShort": "Please lengthen this text.",
-  "form-checkboxRequired": "Please check this box if you want to proceed."
+  "form-checkboxRequired": "Please check this box if you want to proceed.",
+  "social-title": "Coming Soon on Social Media!",
+  "social-message": "We'll be launching our social media profiles soon. Follow us to stay updated on our projects and news!"
 }

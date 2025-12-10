@@ -132,5 +132,7 @@
   "form-valueMissing": "Veuillez remplir ce champ.",
   "form-typeMismatch": "Veuillez saisir une adresse e-mail valide.",
   "form-tooShort": "Veuillez allonger ce texte.",
-  "form-checkboxRequired": "Veuillez cocher cette case si vous souhaitez continuer."
+  "form-checkboxRequired": "Veuillez cocher cette case si vous souhaitez continuer.",
+  "social-title": "Bientôt sur les réseaux sociaux !",
+  "social-message": "Nous lancerons bientôt nos profils sur les réseaux sociaux. Suivez-nous pour rester informé de nos projets et actualités !"
 }
