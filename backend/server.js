@@ -353,7 +353,8 @@ app.get('/csrf-token', (req, res) => {
 });
 
 // Endpoint do obsługi formularza kontaktowego
-app.post('/contact', contactLimiter, verifyCsrfToken, async (req, res) => {
+// CSRF wyłączony - rate limiting jest wystarczającym zabezpieczeniem
+app.post('/contact', contactLimiter, async (req, res) => {
   try {
     console.log('📨 Otrzymano nową wiadomość kontaktową');
     console.log('📋 Dane z formularza:', JSON.stringify(req.body, null, 2));

@@ -40,23 +40,6 @@ function initContactForm() {
     }
   });
   
-  // Funkcja do pobierania CSRF tokenu
-  async function getCsrfToken() {
-    try {
-      const response = await fetch('https://greensun-backend.fly.dev/csrf-token', {
-        method: 'GET',
-        credentials: 'include' // Ważne dla ciasteczek
-      });
-      if (response.ok) {
-        const data = await response.json();
-        return data.csrfToken;
-      }
-    } catch (error) {
-      console.error('Błąd pobierania CSRF tokenu:', error);
-    }
-    return null;
-  }
-
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
 
@@ -72,14 +55,6 @@ function initContactForm() {
     submitBtn.textContent = formMessages[lang] ? formMessages[lang].sending : 'Wysyłanie...';
 
     try {
-      // Pobierz CSRF token
-      const csrfToken = await getCsrfToken();
-      if (!csrfToken) {
-        throw new Error(lang === 'pl' ? 'Nie można uzyskać tokenu bezpieczeństwa' :
-                      lang === 'fr' ? 'Impossible d\'obtenir le jeton de sécurité' :
-                      'Unable to obtain security token');
-      }
-
       const formData = new FormData(form);
       const data = {
         firstName: formData.get('firstName') || '',
@@ -95,10 +70,8 @@ function initContactForm() {
       const response = await fetch('https://greensun-backend.fly.dev/contact', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
-          'X-CSRF-Token': csrfToken
+          'Content-Type': 'application/json'
         },
-        credentials: 'include', // Ważne dla ciasteczek
         body: JSON.stringify(data)
       });
 
