@@ -43,7 +43,7 @@ function initContactForm() {
   // Funkcja do pobierania CSRF tokenu
   async function getCsrfToken() {
     try {
-      const response = await fetch('https://greensun-2.fly.dev/csrf-token', {
+      const response = await fetch('https://greensun-backend.fly.dev/csrf-token', {
         method: 'GET',
         credentials: 'include' // Ważne dla ciasteczek
       });
@@ -92,7 +92,7 @@ function initContactForm() {
         language: lang
       };
 
-      const response = await fetch('https://greensun-2.fly.dev/contact', {
+      const response = await fetch('https://greensun-backend.fly.dev/contact', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
